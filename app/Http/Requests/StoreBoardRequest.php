@@ -11,7 +11,7 @@ class StoreBoardRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -22,7 +22,12 @@ class StoreBoardRequest extends FormRequest
     public function rules(): array
     {
         return [
-            //
+            'title' => ['required'],
+            'content' => ['required'],
         ];
+        // return [
+        //     'name' => ['required', 'string', 'max:255'],
+        //     'email' => ['required', 'string', 'lowercase', 'email', 'max:255', Rule::unique(User::class)->ignore($this->user()->id)],
+        // ];
     }
 }
