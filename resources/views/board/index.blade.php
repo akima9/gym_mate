@@ -15,18 +15,20 @@
                     @foreach ($boards as $board)
                         <div class="border border-inherit p-3 mt-5 hover:bg-slate-50">
                             <a href="{{route('boards.show', ['board' => $board])}}">
-                                <h2 class="text-lg font-medium text-gray-900">
-                                    {{$board->title}}
-                                </h2>
-                                <p class="mt-1 text-sm text-gray-600">
-                                    {{$board->user->nickname}}
-                                </p>
-                                <p class="mt-1 text-sm text-gray-600">
-                                    {{$board->gym->title}}
-                                </p>
                                 <p class="mt-1 text-sm text-gray-600">
                                     {{$board->created_at->diffForHumans()}}
                                 </p>
+                                <h2 class="text-lg font-medium text-gray-900">
+                                    {{$board->title}}
+                                </h2>
+                                <div class="flex space-x-4 justify-start mt-5">
+                                    <p class="mt-1 text-sm text-gray-600">
+                                        {{$board->gym->title}}
+                                    </p>
+                                    <p class="mt-1 text-sm text-gray-600">
+                                        {{$board->user->nickname}}
+                                    </p>
+                                </div>
                             </a>
                         </div>
                     @endforeach
