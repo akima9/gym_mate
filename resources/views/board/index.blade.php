@@ -9,7 +9,7 @@
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                 <div class="p-6 text-gray-900">
-                    <a href="{{route('boards.create')}}" class="bg-indigo-500 hover:bg-indigo-600 py-2 px-3 rounded text-white text-sm font-bold">글작성</a>
+                    <x-primary-anchor :href="route('boards.create')">글작성</x-primary-anchor>
                 </div>
             </div>
         </div>

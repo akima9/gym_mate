@@ -6,6 +6,7 @@ use Illuminate\Foundation\Http\FormRequest;
 
 class StoreBoardRequest extends FormRequest
 {
+    protected $redirectRoute = 'boards.create';
     /**
      * Determine if the user is authorized to make this request.
      */

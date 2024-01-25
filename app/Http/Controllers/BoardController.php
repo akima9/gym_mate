@@ -5,13 +5,14 @@ namespace App\Http\Controllers;
 use App\Http\Requests\StoreBoardRequest;
 use App\Http\Requests\UpdateBoardRequest;
 use App\Models\Board;
+use Illuminate\View\View;
 
 class BoardController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(): View
     {
         return view('board.index');
     }
@@ -19,7 +20,7 @@ class BoardController extends Controller
     /**
      * Show the form for creating a new resource.
      */
-    public function create()
+    public function create(): View
     {
         return view('board.create');
     }
@@ -29,7 +30,16 @@ class BoardController extends Controller
      */
     public function store(StoreBoardRequest $request)
     {
-        dd($request);
+        $validated = $request->validated();
+        
+        $board = Board::create([
+            'title' => $validated['title'],
+            'content' => $validated['content'],
+            'user_id' => $request->user()->id,
+            'gym_id' => $request->user()->gym_id,
+        ]);
+
+        return redirect()->route('boards.show', ['board' => $board]);        
     }
 
     /**
@@ -37,7 +47,7 @@ class BoardController extends Controller
      */
     public function show(Board $board)
     {
-        //
+        return view('board.show', ['board' => $board]);
     }
 
     /**
@@ -45,7 +55,7 @@ class BoardController extends Controller
      */
     public function edit(Board $board)
     {
-        //
+        return view('board.edit', ['board' => $board]);
     }
 
     /**
