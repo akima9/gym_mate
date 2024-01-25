@@ -12,16 +12,22 @@
                     <div class="flex space-x-2 justify-end">
                         <x-primary-anchor :href="route('boards.index')">목록</x-primary-anchor>
                         <x-primary-anchor :href="route('boards.edit', ['board' => $board])">수정</x-primary-anchor>
-                        <x-primary-anchor :href="route('boards.destroy', ['board' => $board])">삭제</x-primary-anchor>
+                        <form action="{{route('boards.destroy', ['board' => $board])}}" method="POST">
+                            @csrf
+                            @method('DELETE')
+                            {{-- <input type="hidden" name="id" value="{{$board->id}}"> --}}
+                            <x-primary-button>{{ __('삭제') }}</x-primary-button>
+                        </form>
+                        {{-- <x-primary-anchor :href="route('boards.destroy', ['board' => $board])">삭제</x-primary-anchor> --}}
                     </div>
                     <p class="mt-1 text-sm text-gray-600">
                         {{$board->created_at->diffForHumans()}}
                     </p>
-                    <h2 class="text-lg font-medium text-gray-900">
+                    <h2 class="text-lg font-medium text-gray-900 mb-5">
                         {{$board->title}}
                     </h2>
-                    <p class="mt-1 text-sm text-gray-600">
-                        {{$board->content}}
+                    <p class="mt-1 text-sm text-gray-600 leading-loose">
+                        {!!nl2br(e($board->content))!!}
                     </p>
                     <div class="flex space-x-4 justify-start mt-5">
                         <p class="mt-1 text-sm text-gray-600">

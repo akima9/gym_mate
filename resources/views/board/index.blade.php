@@ -9,7 +9,9 @@
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                 <div class="p-6 text-gray-900">
-                    <x-primary-anchor :href="route('boards.create')">글작성</x-primary-anchor>
+                    <div class="flex justify-end">
+                        <x-primary-anchor :href="route('boards.create')">글작성</x-primary-anchor>
+                    </div>
                     @foreach ($boards as $board)
                         <div class="border border-inherit p-3 mt-5 hover:bg-slate-50">
                             <a href="{{route('boards.show', ['board' => $board])}}">

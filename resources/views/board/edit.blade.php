@@ -24,7 +24,7 @@
                             </x-text-area>
                             <x-input-error class="mt-2" :messages="$errors->get('content')" />
                         </div>
-                        <x-primary-button>{{ __('등록') }}</x-primary-button>
+                        <x-primary-button>{{ __('수정') }}</x-primary-button>
                     </form>
                 </div>
             </div>

@@ -65,7 +65,14 @@ class BoardController extends Controller
      */
     public function update(UpdateBoardRequest $request, Board $board)
     {
-        //
+        $validated = $request->validated();
+        
+        $updatedBoard = Board::where('id', $board->id)->update([
+            'title' => $validated['title'],
+            'content' => $validated['content'],
+        ]);
+
+        return redirect()->route('boards.show', ['board' => $updatedBoard]);
     }
 
     /**
@@ -73,6 +80,8 @@ class BoardController extends Controller
      */
     public function destroy(Board $board)
     {
-        //
+        Board::destroy($board->id);
+
+        return redirect()->route('boards.index');
     }
 }
