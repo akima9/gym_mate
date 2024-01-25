@@ -8,4 +8,9 @@ use Illuminate\Database\Eloquent\Model;
 class Gym extends Model
 {
     use HasFactory;
+
+    public function boards()
+    {
+        return $this->hasMany(Board::class);
+    }
 }
