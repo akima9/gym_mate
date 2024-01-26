@@ -9,6 +9,10 @@ use Illuminate\View\View;
 
 class BoardController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('auth')->except(['index', 'show']);
+    }
     /**
      * Display a listing of the resource.
      */
@@ -57,6 +61,7 @@ class BoardController extends Controller
      */
     public function edit(Board $board)
     {
+        $this->authorize('update', $board);
         return view('board.edit', ['board' => $board]);
     }
 
@@ -65,12 +70,15 @@ class BoardController extends Controller
      */
     public function update(UpdateBoardRequest $request, Board $board)
     {
+        $this->authorize('update', $board);
         $validated = $request->validated();
         
-        $updatedBoard = Board::where('id', $board->id)->update([
+        Board::where('id', $board->id)->update([
             'title' => $validated['title'],
             'content' => $validated['content'],
         ]);
+        
+        $updatedBoard = Board::find($board->id);
 
         return redirect()->route('boards.show', ['board' => $updatedBoard]);
     }
@@ -80,6 +88,7 @@ class BoardController extends Controller
      */
     public function destroy(Board $board)
     {
+        $this->authorize('delete', $board);
         Board::destroy($board->id);
 
         return redirect()->route('boards.index');

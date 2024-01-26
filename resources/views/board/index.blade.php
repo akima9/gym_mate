@@ -10,7 +10,7 @@
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                 <div class="p-6 text-gray-900">
                     <div class="flex justify-end">
-                        <x-primary-anchor :href="route('boards.create')">글작성</x-primary-anchor>
+                        <x-primary-anchor :href="route('boards.create')">글쓰기</x-primary-anchor>
                     </div>
                     @foreach ($boards as $board)
                         <div class="border border-inherit p-3 mt-5 hover:bg-slate-50">

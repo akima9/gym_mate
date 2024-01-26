@@ -13,7 +13,7 @@ class BoardPolicy
      */
     public function viewAny(User $user): bool
     {
-        //
+        return true;
     }
 
     /**
@@ -21,7 +21,7 @@ class BoardPolicy
      */
     public function view(User $user, Board $board): bool
     {
-        //
+        return true;
     }
 
     /**
@@ -29,7 +29,7 @@ class BoardPolicy
      */
     public function create(User $user): bool
     {
-        //
+        return ($user->id) ? true : false;
     }
 
     /**
@@ -37,7 +37,7 @@ class BoardPolicy
      */
     public function update(User $user, Board $board): bool
     {
-        //
+        return $user->id === $board->user_id;
     }
 
     /**
@@ -45,7 +45,7 @@ class BoardPolicy
      */
     public function delete(User $user, Board $board): bool
     {
-        //
+        return $user->id === $board->user_id;
     }
 
     /**
@@ -53,7 +53,7 @@ class BoardPolicy
      */
     public function restore(User $user, Board $board): bool
     {
-        //
+        return true;
     }
 
     /**
@@ -61,6 +61,6 @@ class BoardPolicy
      */
     public function forceDelete(User $user, Board $board): bool
     {
-        //
+        return true;
     }
 }
