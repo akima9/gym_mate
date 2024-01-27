@@ -15,3 +15,19 @@
         </div>
     </div>
 </x-app-layout>
+
+<script>
+    // window.Echo.private(`orders.${orderId}`)
+    //     .listen('OrderShipmentStatusUpdated', (e) => {
+    //         console.log(e.order);
+    //     });
+
+    // this.echo.channel('chat').listen('ChatSent', (e) => {
+    //     this.onChatSent(e);
+    //   });
+    console.log(window.Echo);
+    console.log(Echo);
+    window.Echo.channel('chat').listen('ChatSent', (e) => {
+        console.log(e);
+    })
+</script>
