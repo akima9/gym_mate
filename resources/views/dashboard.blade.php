@@ -14,20 +14,21 @@
             </div>
         </div>
     </div>
+    <script>
+        // import Echo from 'laravel-echo'
+
+        // window.Echo = new Echo({
+        //     broadcaster: 'pusher',
+        //     key: 'e87e1d4e3f72a0b516ba',
+        //     cluster: 'ap3',
+        //     forceTLS: true
+        // });
+
+        var channel = window.Echo.channel('chat');
+        channel.listen('.chatSent', function(data) {
+            // alert(JSON.stringify(data));
+            alert(data);
+        });
+    </script>
 </x-app-layout>
 
-<script>
-    // window.Echo.private(`orders.${orderId}`)
-    //     .listen('OrderShipmentStatusUpdated', (e) => {
-    //         console.log(e.order);
-    //     });
-
-    // this.echo.channel('chat').listen('ChatSent', (e) => {
-    //     this.onChatSent(e);
-    //   });
-    console.log(window.Echo);
-    console.log(Echo);
-    window.Echo.channel('chat').listen('ChatSent', (e) => {
-        console.log(e);
-    })
-</script>
