@@ -21,5 +21,13 @@ class UserSeeder extends Seeder
             'age' => 34,
             'gym_id' => 1,
         ]);
+        User::create([
+            'nickname' => '테스터',
+            'email' => 'dev.giyong@gmail.com',
+            'password' => '1',
+            'gender' => 'man',
+            'age' => 34,
+            'gym_id' => 1,
+        ]);
     }
 }
