@@ -4,12 +4,19 @@ namespace App\Http\Controllers;
 
 use App\Events\ChatSent;
 use App\Http\Requests\StoreChatRequest;
+use App\Http\Requests\SendChatRequest;
 use App\Models\Board;
 use App\Models\Chat;
+use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class ChatController extends Controller
 {
+    public function __construct()
+    {
+        // $this->middleware('auth');
+    }
     /**
      * Display a listing of the resource.
      */
@@ -73,11 +80,40 @@ class ChatController extends Controller
         //
     }
 
-    public function send()
+    public function send(SendChatRequest $request)
     {
-        $sender = request('sender');
-        $message = request('message');
+        $validated = $request->validated();
 
-        broadcast(new ChatSent($sender, $message, now()));
+        $chat = Chat::create([
+            'message' => $validated['message'],
+            'send_user_id' => $request->user()->id,
+            'receive_user_id' => $validated['receive_user_id'],
+        ]);
+
+        return response()->json($chat);
+        // return json_encode($request);
+
+        // dd($request->all());
+        // $sender = request('sender');
+        // $message = request('message');
+
+        // broadcast(new ChatSent($sender, $message, now()));
+    }
+
+    public function load(Request $request)
+    {
+        $chat = Chat::where('send_user_id', $request->send_user_id)
+            ->where('receive_user_id', $request->receive_user_id)
+            ->first();
+        
+        $chats = Chat::where('send_user_id', $request->send_user_id)
+            ->where('receive_user_id', $request->receive_user_id)
+            ->get();
+
+        return response()->json([
+            'chats' => $chats, 
+            'sendUser' => $chat->sendUser,
+            'receiveUser' => $chat->receiveUser,
+        ]);
     }
 }

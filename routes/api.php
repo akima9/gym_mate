@@ -19,4 +19,4 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-Route::post('/api/chat/send', [ChatController::class, 'send']);
+// Route::post('/chat/send', [ChatController::class, 'send'])->name('chats.send');

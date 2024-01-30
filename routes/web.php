@@ -33,6 +33,8 @@ Route::middleware('auth')->group(function () {
 });
 
 Route::resource('boards', BoardController::class);
+Route::get('/chats/load', [ChatController::class, 'load'])->name('chats.load');
 Route::resource('chats', ChatController::class);
+Route::post('/chats/send', [ChatController::class, 'send'])->name('chats.send');
 
 require __DIR__.'/auth.php';
