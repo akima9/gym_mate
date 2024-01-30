@@ -30,3 +30,8 @@ window.Echo = new Echo({
     forceTLS: (import.meta.env.VITE_PUSHER_SCHEME ?? 'https') === 'https',
     enabledTransports: ['ws', 'wss'],
 });
+
+let channel = window.Echo.channel('chat');
+channel.listen('ChatSent', function(data) {
+    alert(JSON.stringify(data));
+});

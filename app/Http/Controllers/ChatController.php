@@ -90,14 +90,8 @@ class ChatController extends Controller
             'receive_user_id' => $validated['receive_user_id'],
         ]);
 
+        broadcast(new ChatSent($request->user()->id, $validated['message'], now()));
         return response()->json($chat);
-        // return json_encode($request);
-
-        // dd($request->all());
-        // $sender = request('sender');
-        // $message = request('message');
-
-        // broadcast(new ChatSent($sender, $message, now()));
     }
 
     public function load(Request $request)
