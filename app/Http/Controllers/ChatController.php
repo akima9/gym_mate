@@ -10,19 +10,39 @@ use App\Models\Chat;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\View\View;
 
 class ChatController extends Controller
 {
     public function __construct()
     {
-        // $this->middleware('auth');
+        $this->middleware('auth');
     }
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(): View
     {
-        //
+        $user = auth()->user();
+
+        $chats = Chat::where('send_user_id', $user->id)
+                        ->orWhere('receive_user_id', $user->id)
+                        ->with('sendUser', 'receiveUser')
+                        ->latest('created_at')
+                        ->get();
+
+        $chatPartners = $chats->flatMap(function ($chat) use ($user) {
+            return ($chat->send_user_id === $user->id) ? [$chat->receiveUser] : [$chat->sendUser];
+        })->unique('id');
+
+        $latestMessages = [];
+        foreach ($chatPartners as $partner) {
+            $latestMessages[$partner->id] = $chats->filter(function ($chat) use ($partner) {
+                return $chat->send_user_id === $partner->id || $chat->receive_user_id === $partner->id;
+            })->first();
+        }
+
+        return view('chat.index', compact('user', 'chatPartners', 'latestMessages'));
     }
 
     /**
@@ -109,5 +129,18 @@ class ChatController extends Controller
             'sendUser' => $chat->sendUser,
             'receiveUser' => $chat->receiveUser,
         ]);
+    }
+
+    public function detail(Request $request)
+    {
+        $user = auth()->user();
+        $chatPartnerId = $request->chatPartner;
+
+        $chats = Chat::where([['send_user_id', $user->id], ['receive_user_id', $chatPartnerId]])
+                        ->orWhere([['send_user_id', $chatPartnerId], ['receive_user_id', $user->id]])
+                        ->with('sendUser', 'receiveUser')
+                        ->get();
+
+        return view('chat.detail', compact('chats'));
     }
 }
