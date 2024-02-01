@@ -50,8 +50,8 @@ class ChatController extends Controller
      */
     public function create(Request $request)
     {
-        $board = Board::find($request->board);
-        return view('chat.create', ['board' => $board]);
+        // $board = Board::find($request->board);
+        // return view('chat.create', ['board' => $board]);
     }
 
     /**
@@ -59,7 +59,7 @@ class ChatController extends Controller
      */
     public function store(StoreChatRequest $request)
     {
-        $validated = $request->validated();
+        // $validated = $request->validated();
         
         // $chat = Chat::create([
         //     'message' => $validated['message'],
@@ -116,19 +116,19 @@ class ChatController extends Controller
 
     public function load(Request $request)
     {
-        $chat = Chat::where('send_user_id', $request->send_user_id)
-            ->where('receive_user_id', $request->receive_user_id)
-            ->first();
+        // $chat = Chat::where('send_user_id', $request->send_user_id)
+        //     ->where('receive_user_id', $request->receive_user_id)
+        //     ->first();
         
-        $chats = Chat::where('send_user_id', $request->send_user_id)
-            ->where('receive_user_id', $request->receive_user_id)
-            ->get();
+        // $chats = Chat::where('send_user_id', $request->send_user_id)
+        //     ->where('receive_user_id', $request->receive_user_id)
+        //     ->get();
 
-        return response()->json([
-            'chats' => $chats, 
-            'sendUser' => $chat->sendUser,
-            'receiveUser' => $chat->receiveUser,
-        ]);
+        // return response()->json([
+        //     'chats' => $chats, 
+        //     'sendUser' => $chat->sendUser,
+        //     'receiveUser' => $chat->receiveUser,
+        // ]);
     }
 
     public function detail(Request $request)

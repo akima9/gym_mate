@@ -84,17 +84,17 @@
                     console.log(chatDiv);
                     document.querySelector('#messages').appendChild(chatDiv);
                 },
-                load: () => {
-                    let apiUrl = "{{ route('chats.load') }}";
-                    let data = {
-                        receive_user_id: '{{ $chatPartnerId }}',
-                        send_user_id: '{{Auth::user()->id}}'
-                    };
-                    let url = new URL(apiUrl);
-                    Object.keys(data).forEach(key => url.searchParams.append(key, data[key]));
+                // load: () => {
+                //     let apiUrl = "{{ route('chats.load') }}";
+                //     let data = {
+                //         receive_user_id: '{{ $chatPartnerId }}',
+                //         send_user_id: '{{Auth::user()->id}}'
+                //     };
+                //     let url = new URL(apiUrl);
+                //     Object.keys(data).forEach(key => url.searchParams.append(key, data[key]));
 
-                    chat.getData(url, data);
-                },
+                //     chat.getData(url, data);
+                // },
                 send: () => {
                     console.log('call send')
                     let messageInput = document.querySelector('#message');

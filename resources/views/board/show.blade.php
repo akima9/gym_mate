@@ -21,7 +21,7 @@
                                 <x-primary-button>{{ __('삭제') }}</x-primary-button>
                             </form>
                         @endcan
-                        <x-primary-anchor :href="route('chats.create', ['board' => $board])">채팅</x-primary-anchor>
+                        <x-primary-anchor :href="route('chats.detail', ['chatPartner' => $board->user_id])">채팅</x-primary-anchor>
                     </div>
                     <p class="mt-1 text-sm text-gray-600">
                         {{$board->created_at->diffForHumans()}}

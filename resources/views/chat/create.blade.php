@@ -1,4 +1,4 @@
-<x-app-layout>
+{{-- <x-app-layout>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
 
     <x-slot name="header">
@@ -11,11 +11,6 @@
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                 <div id="messages" class="p-6 text-gray-900">
-                    {{-- <div class="mb-3">
-                        <p class="text-sm text-gray-600">nickname</p>
-                        <p class="bg-slate-100 rounded p-2">text</p>
-                        <p class="text-sm text-gray-600">time</p>
-                    </div> --}}
                 </div>
                 <div class="p-6 text-gray-900">
                     <div class="mb-4">
@@ -132,4 +127,4 @@
         </script>
     @endpush
 
-</x-app-layout>
+</x-app-layout> --}}
