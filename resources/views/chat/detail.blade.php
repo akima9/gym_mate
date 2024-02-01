@@ -10,18 +10,18 @@
     <div class="py-12">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
-                <div id="messages" class="p-6 text-gray-900">
+                <div id="messages" class="p-6 text-gray-900 h-96 overflow-y-auto">
                     @foreach ($chats as $chat)
-                        @if ($chat->receiveUser->id === auth()->user()->id) {{-- receive --}}
+                        @if ($chat->receiveUser->id === auth()->user()->id)
                             <div class="mb-5">
                                 <p class="text-sm text-gray-600">{{ $chat->sendUser->nickname }}</p>
                                 <p class="bg-slate-100 rounded p-2">{{ $chat->message }}</p>
                                 <p class="text-sm text-gray-600">{{ $chat->created_at->diffForHumans() }}</p>
                             </div>
-                        @else {{-- send --}}
-                            <div class="mb-5">
-                                <p class="bg-slate-100 rounded p-2 flex justify-end">{{ $chat->message }}</p>
-                                <p class="text-sm text-gray-600 flex justify-end">{{ $chat->created_at->diffForHumans() }}</p>
+                        @else
+                            <div class="mb-5 text-right">
+                                <p class="bg-slate-100 rounded p-2">{{ $chat->message }}</p>
+                                <p class="text-sm text-gray-600">{{ $chat->created_at->diffForHumans() }}</p>
                             </div>
                         @endif
                     @endforeach
@@ -36,14 +36,58 @@
             </div>
         </div>
     </div>
+
+    @push('pusher-cdn')
+        <script src="https://js.pusher.com/8.2.0/pusher.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/laravel-echo@1.11.2/dist/echo.iife.js"></script>
+    @endpush
     
-    {{-- @push('scripts')
+    @push('scripts')
         <script>
+            window.Pusher = Pusher;
+            window.Echo = new Echo({
+                broadcaster: 'pusher',
+                key: 'e87e1d4e3f72a0b516ba',
+                cluster: 'ap3',
+                wsHost: `ws-ap3.pusher.com`,
+                wsPort: 80,
+                wssPort: 443,
+                forceTLS: true,
+                enabledTransports: ['ws', 'wss'],
+            });
+
+            let channel = window.Echo.channel('chat');
+            channel.listen('ChatSent', function(data) {
+                chat.make(data);
+            });
+
             const chat = {
+                make: (data) => {
+                    console.log('call make');
+                    console.log(data);
+
+                    let chatDiv = document.createElement('div');
+                    chatDiv.className = 'mb-5 text-right';
+
+                    let messageP = document.createElement('p');
+                    messageP.className = 'bg-slate-100 rounded p-2';
+                    let message = document.createTextNode(data.message);
+                    messageP.appendChild(message);
+                    
+                    let createAtP = document.createElement('p');
+                    createAtP.className = 'text-sm text-gray-600';
+                    let createAt = document.createTextNode(moment(data.sentAt).fromNow());
+                    createAtP.appendChild(createAt);
+                    
+                    chatDiv.appendChild(messageP);
+                    chatDiv.appendChild(createAtP);
+                    console.log(chatDiv);
+                    document.querySelector('#messages').appendChild(chatDiv);
+                },
                 load: () => {
                     let apiUrl = "{{ route('chats.load') }}";
                     let data = {
-                        receive_user_id: '{{$board->user_id}}',
+                        receive_user_id: '{{ $chatPartnerId }}',
                         send_user_id: '{{Auth::user()->id}}'
                     };
                     let url = new URL(apiUrl);
@@ -65,7 +109,7 @@
                     let url = "{{ route('chats.send') }}";
                     let data = {
                         'message': message,
-                        'receive_user_id': '{{$board->user_id}}',
+                        'receive_user_id': '{{ $chatPartnerId }}',
                     };
 
                     chat.postData(url, data);
@@ -82,7 +126,7 @@
                     .then(response => response.json())
                     .then(data => {
                         console.log(data);
-                        chat.load();
+                        // chat.load();
                     })
                     .catch(error => console.error('Error:', error));
                 },
@@ -137,8 +181,8 @@
                 }
             };
 
-            chat.load();
+            // chat.load();
         </script>
-    @endpush --}}
+    @endpush
 
 </x-app-layout>

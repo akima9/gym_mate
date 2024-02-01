@@ -141,6 +141,6 @@ class ChatController extends Controller
                         ->with('sendUser', 'receiveUser')
                         ->get();
 
-        return view('chat.detail', compact('chats'));
+        return view('chat.detail', compact('chats', 'chatPartnerId'));
     }
 }

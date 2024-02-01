@@ -31,7 +31,7 @@ window.Echo = new Echo({
     enabledTransports: ['ws', 'wss'],
 });
 
-let channel = window.Echo.channel('chat');
-channel.listen('ChatSent', function(data) {
-    alert(JSON.stringify(data));
-});
+// let channel = window.Echo.channel('chat');
+// channel.listen('ChatSent', function(data) {
+//     alert(JSON.stringify(data));
+// });

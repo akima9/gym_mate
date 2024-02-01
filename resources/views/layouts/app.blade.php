@@ -13,6 +13,7 @@
 
         <!-- Scripts -->
         @vite(['resources/css/app.css', 'resources/js/app.js'])
+        @stack('pusher-cdn')
     </head>
     <body class="font-sans antialiased">
         <div class="min-h-screen bg-gray-100">
