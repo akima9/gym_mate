@@ -15,15 +15,17 @@ class ChatSent implements ShouldBroadcast
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
     public $sender;
+    public $nickname;
     public $message;
     public $sentAt;
 
     /**
      * Create a new event instance.
      */
-    public function __construct($sender, $message, $sentAt)
+    public function __construct($sender, $nickname, $message, $sentAt)
     {
         $this->sender = $sender;
+        $this->nickname = $nickname;
         $this->message = $message;
         $this->sentAt = $sentAt;
     }

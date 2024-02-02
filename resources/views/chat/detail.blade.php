@@ -15,23 +15,23 @@
                         @if ($chat->receiveUser->id === auth()->user()->id)
                             <div class="mb-5">
                                 <p class="text-sm text-gray-600">{{ $chat->sendUser->nickname }}</p>
-                                <p class="bg-slate-100 rounded p-2">{{ $chat->message }}</p>
+                                <p class="bg-slate-100 rounded py-2 px-3" style="width:fit-content;max-width:40%">{{ $chat->message }}</p>
                                 <p class="text-sm text-gray-600">{{ $chat->created_at->diffForHumans() }}</p>
                             </div>
                         @else
-                            <div class="mb-5 text-right">
-                                <p class="bg-slate-100 rounded p-2">{{ $chat->message }}</p>
-                                <p class="text-sm text-gray-600">{{ $chat->created_at->diffForHumans() }}</p>
+                            <div class="mb-5">
+                                <p class="bg-slate-100 rounded py-2 px-3 ml-auto" style="width:fit-content;max-width:40%">{{ $chat->message }}</p>
+                                <p class="text-sm text-gray-600 w-fit ml-auto">{{ $chat->created_at->diffForHumans() }}</p>
                             </div>
                         @endif
                     @endforeach
                 </div>
-                <div class="p-6 text-gray-900">
-                    <div class="mb-4">
-                        <x-text-input id="message" name="message" type="text" class="mt-1 block w-full" required autofocus autocomplete="message" />
+                <div class="p-6 text-gray-900 flex">
+                    <div class="flex-1">
+                        <x-text-input onkeydown="chat.handleKeyPress(event)" id="message" name="message" type="text" class="block w-full" required autofocus autocomplete="message" />
                         <x-input-error class="mt-2" :messages="$errors->get('message')" />
                     </div>
-                    <button onclick="chat.send()" class="inline-flex items-center px-4 py-2 bg-gray-800 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-gray-700 focus:bg-gray-700 active:bg-gray-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 transition ease-in-out duration-150">{{ __('보내기') }}</button>
+                    <button onclick="chat.send()" class="inline-flex items-center ml-1 px-4 py-2 bg-gray-800 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-gray-700 focus:bg-gray-700 active:bg-gray-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 transition ease-in-out duration-150">{{ __('보내기') }}</button>
                 </div>
             </div>
         </div>
@@ -44,44 +44,65 @@
     
     @push('scripts')
         <script>
-            window.Pusher = Pusher;
-            window.Echo = new Echo({
-                broadcaster: 'pusher',
-                key: 'e87e1d4e3f72a0b516ba',
-                cluster: 'ap3',
-                wsHost: `ws-ap3.pusher.com`,
-                wsPort: 80,
-                wssPort: 443,
-                forceTLS: true,
-                enabledTransports: ['ws', 'wss'],
-            });
-
-            let channel = window.Echo.channel('chat');
-            channel.listen('ChatSent', function(data) {
-                chat.make(data);
-            });
-
             const chat = {
+                init: () => {
+                    chat.scrollToBottom();
+
+                    window.Pusher = Pusher;
+                    window.Echo = new Echo({
+                        broadcaster: 'pusher',
+                        key: 'e87e1d4e3f72a0b516ba',
+                        cluster: 'ap3',
+                        wsHost: `ws-ap3.pusher.com`,
+                        wsPort: 80,
+                        wssPort: 443,
+                        forceTLS: true,
+                        enabledTransports: ['ws', 'wss'],
+                    });
+
+                    let channel = window.Echo.channel('chat');
+                    channel.listen('ChatSent', function(data) {
+                        chat.make(data);
+                        chat.scrollToBottom();
+                    });
+                },
+                handleKeyPress: (event) => {
+                    if (event.keyCode === 13) {
+                        chat.send();
+                        document.querySelector('#message').value = "";
+                    }
+                },
+                scrollToBottom: () => {
+                    let messagesDiv = document.querySelector('#messages');
+                    messagesDiv.scrollTop = messagesDiv.scrollHeight;
+                },
                 make: (data) => {
-                    console.log('call make');
-                    console.log(data);
-
                     let chatDiv = document.createElement('div');
-                    chatDiv.className = 'mb-5 text-right';
-
+                    let nicknameP = document.createElement('p');
                     let messageP = document.createElement('p');
-                    messageP.className = 'bg-slate-100 rounded p-2';
                     let message = document.createTextNode(data.message);
-                    messageP.appendChild(message);
-                    
                     let createAtP = document.createElement('p');
-                    createAtP.className = 'text-sm text-gray-600';
                     let createAt = document.createTextNode(moment(data.sentAt).fromNow());
-                    createAtP.appendChild(createAt);
                     
+                    if (data.sender === {{auth()->user()->id}}) {
+                        messageP.className = 'bg-slate-100 rounded py-2 px-3 ml-auto';
+                        createAtP.className = 'text-sm text-gray-600 w-fit ml-auto';
+                    } else {
+                        nicknameP.className = 'text-sm text-gray-600';
+                        nickname = document.createTextNode(data.nickname);
+                        nicknameP.appendChild(nickname);
+                        chatDiv.appendChild(nicknameP);
+
+                        messageP.className = 'bg-slate-100 rounded py-2 px-3';
+                        createAtP.className = 'text-sm text-gray-600';
+                    }
+                    chatDiv.className = 'mb-5';
+                    messageP.setAttribute('style', 'width:fit-content;max-width:40%');
+
+                    messageP.appendChild(message);
+                    createAtP.appendChild(createAt);
                     chatDiv.appendChild(messageP);
                     chatDiv.appendChild(createAtP);
-                    console.log(chatDiv);
                     document.querySelector('#messages').appendChild(chatDiv);
                 },
                 // load: () => {
@@ -96,7 +117,6 @@
                 //     chat.getData(url, data);
                 // },
                 send: () => {
-                    console.log('call send')
                     let messageInput = document.querySelector('#message');
                     let message = messageInput.value;
 
@@ -125,28 +145,26 @@
                     })
                     .then(response => response.json())
                     .then(data => {
-                        console.log(data);
                         // chat.load();
                     })
                     .catch(error => console.error('Error:', error));
                 },
-                getData: (url, data) => {
-                    fetch(url)
-                    .then(response => {
-                        if (!response.ok) {
-                            throw new Error(response);
-                        }
-                        return response.json();
-                    })
-                    .then(data => {
-                        // console.log(data);
-                        let chats = data.chats;
-                        let sendUser = data.sendUser;
-                        let receiveUser = data.receiveUser;
-                        chat.showChat(chats, sendUser, receiveUser);
-                    })
-                    .catch(error => console.error('Error:', error));
-                },
+                // getData: (url, data) => {
+                //     fetch(url)
+                //     .then(response => {
+                //         if (!response.ok) {
+                //             throw new Error(response);
+                //         }
+                //         return response.json();
+                //     })
+                //     .then(data => {
+                //         let chats = data.chats;
+                //         let sendUser = data.sendUser;
+                //         let receiveUser = data.receiveUser;
+                //         chat.showChat(chats, sendUser, receiveUser);
+                //     })
+                //     .catch(error => console.error('Error:', error));
+                // },
                 showChat: (chats, sendUser, receiveUser) => {
                     chats.forEach((chat) => {
                         let chatDiv = document.createElement('div');
@@ -175,13 +193,13 @@
                         chatDiv.appendChild(nickNameP);
                         chatDiv.appendChild(messageP);
                         chatDiv.appendChild(createAtP);
-                        console.log(chatDiv);
                         document.querySelector('#messages').appendChild(chatDiv);
                     });
                 }
             };
 
             // chat.load();
+            chat.init();
         </script>
     @endpush
 
