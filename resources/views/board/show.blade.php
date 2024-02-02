@@ -21,11 +21,15 @@
                                 <x-primary-button>{{ __('삭제') }}</x-primary-button>
                             </form>
                         @endcan
-                        <form action="{{route('chats.detail')}}" method="POST">
-                            @csrf
-                            <input type="hidden" name="chatPartner" value="{{ $board->user_id }}">
-                            <x-primary-button>{{ __('채팅') }}</x-primary-button>
-                        </form>
+                        @auth
+                            @if ($board->user_id !== auth()->user()->id)
+                                <form action="{{route('chats.detail')}}" method="POST">
+                                    @csrf
+                                    <input type="hidden" name="chatPartner" value="{{ $board->user_id }}">
+                                    <x-primary-button>{{ __('채팅') }}</x-primary-button>
+                                </form>
+                            @endif
+                        @endauth
                     </div>
                     <p class="mt-1 text-sm text-gray-600">
                         {{$board->created_at->diffForHumans()}}
