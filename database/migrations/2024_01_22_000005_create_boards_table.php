@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('title');
             $table->string('content');
+            $table->enum('status', ['running', 'done'])->default('running');
             $table->foreignId('user_id')->constrained('users');
             $table->foreignId('gym_id')->constrained('gyms');
             $table->timestamps();
