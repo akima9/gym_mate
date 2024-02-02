@@ -35,7 +35,7 @@ Route::middleware('auth')->group(function () {
 Route::resource('boards', BoardController::class);
 Route::get('/chats/load', [ChatController::class, 'load'])->name('chats.load');
 Route::post('/chats/send', [ChatController::class, 'send'])->name('chats.send');
-Route::get('/chats/detail', [ChatController::class, 'detail'])->name('chats.detail');
+Route::post('/chats/detail', [ChatController::class, 'detail'])->name('chats.detail');
 Route::resource('chats', ChatController::class);
 
 require __DIR__.'/auth.php';

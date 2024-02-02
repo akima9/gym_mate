@@ -21,7 +21,11 @@
                                 <x-primary-button>{{ __('삭제') }}</x-primary-button>
                             </form>
                         @endcan
-                        <x-primary-anchor :href="route('chats.detail', ['chatPartner' => $board->user_id])">채팅</x-primary-anchor>
+                        <form action="{{route('chats.detail')}}" method="POST">
+                            @csrf
+                            <input type="hidden" name="chatPartner" value="{{ $board->user_id }}">
+                            <x-primary-button>{{ __('채팅') }}</x-primary-button>
+                        </form>
                     </div>
                     <p class="mt-1 text-sm text-gray-600">
                         {{$board->created_at->diffForHumans()}}
