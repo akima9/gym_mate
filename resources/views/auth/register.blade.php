@@ -4,9 +4,9 @@
 
         <!-- Name -->
         <div>
-            <x-input-label for="name" :value="__('Name')" />
-            <x-text-input id="name" class="block mt-1 w-full" type="text" name="name" :value="old('name')" required autofocus autocomplete="name" />
-            <x-input-error :messages="$errors->get('name')" class="mt-2" />
+            <x-input-label for="nickname" :value="__('Nickname')" />
+            <x-text-input id="nickname" class="block mt-1 w-full" type="text" name="nickname" :value="old('nickname')" required autofocus autocomplete="nickname" />
+            <x-input-error :messages="$errors->get('nickname')" class="mt-2" />
         </div>
 
         <!-- Email Address -->
@@ -37,6 +37,35 @@
                             name="password_confirmation" required autocomplete="new-password" />
 
             <x-input-error :messages="$errors->get('password_confirmation')" class="mt-2" />
+        </div>
+
+        <div class="mt-4">
+            <label class="block font-medium text-sm text-gray-700">{{__('Gender')}}</label>
+            <div class="flex justify-around bg-gray-50 rounded-md shadow-sm mt-1 py-2">
+                <div>
+                    <input type="radio" name="gender" id="man" value="man">
+                    <label for="man">Man</label>
+                </div>
+                <div>
+                    <input type="radio" name="gender" id="woman" value="woman">
+                    <label for="woman">Woman</label>
+                </div>
+            </div>
+        </div>
+
+        <div class="mt-4">
+            <label class="block font-medium text-sm text-gray-700">{{__('Age group')}}</label>
+            <select name="age" id="age" class="border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm w-full mt-1">
+                <option value="10">Teenagers</option>
+                <option value="20">Twenties</option>
+                <option value="30">Thirties</option>
+                <option value="40">Forties</option>
+                <option value="50">Fifties</option>
+                <option value="60">Sixties</option>
+                <option value="70">Seventies</option>
+                <option value="80">Eighties</option>
+                <option value="90">Nineties</option>
+            </select>
         </div>
 
         <div class="flex items-center justify-end mt-4">
