@@ -60,7 +60,7 @@
                         enabledTransports: ['ws', 'wss'],
                     });
 
-                    let channel = window.Echo.channel('chat');
+                    let channel = window.Echo.channel('private-chats.{{$chatRoom->id}}');
                     channel.listen('ChatSent', function(data) {
                         chat.make(data);
                         chat.scrollToBottom();
@@ -105,17 +105,6 @@
                     chatDiv.appendChild(createAtP);
                     document.querySelector('#messages').appendChild(chatDiv);
                 },
-                // load: () => {
-                //     let apiUrl = "{{ route('chats.load') }}";
-                //     let data = {
-                //         receive_user_id: '{{ $chatPartnerId }}',
-                //         send_user_id: '{{Auth::user()->id}}'
-                //     };
-                //     let url = new URL(apiUrl);
-                //     Object.keys(data).forEach(key => url.searchParams.append(key, data[key]));
-
-                //     chat.getData(url, data);
-                // },
                 send: () => {
                     let messageInput = document.querySelector('#message');
                     let message = messageInput.value;
@@ -144,27 +133,9 @@
                         body: JSON.stringify(data)
                     })
                     .then(response => response.json())
-                    .then(data => {
-                        // chat.load();
-                    })
+                    .then(data => {})
                     .catch(error => console.error('Error:', error));
                 },
-                // getData: (url, data) => {
-                //     fetch(url)
-                //     .then(response => {
-                //         if (!response.ok) {
-                //             throw new Error(response);
-                //         }
-                //         return response.json();
-                //     })
-                //     .then(data => {
-                //         let chats = data.chats;
-                //         let sendUser = data.sendUser;
-                //         let receiveUser = data.receiveUser;
-                //         chat.showChat(chats, sendUser, receiveUser);
-                //     })
-                //     .catch(error => console.error('Error:', error));
-                // },
                 showChat: (chats, sendUser, receiveUser) => {
                     chats.forEach((chat) => {
                         let chatDiv = document.createElement('div');
@@ -198,7 +169,6 @@
                 }
             };
 
-            // chat.load();
             chat.init();
         </script>
     @endpush

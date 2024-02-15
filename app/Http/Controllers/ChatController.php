@@ -7,6 +7,7 @@ use App\Http\Requests\StoreChatRequest;
 use App\Http\Requests\SendChatRequest;
 use App\Models\Board;
 use App\Models\Chat;
+use App\Models\ChatRoom;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -104,32 +105,20 @@ class ChatController extends Controller
     {
         $validated = $request->validated();
 
+
+        $chatRoom = ChatRoom::whereIn('admin_user_id', [$request->user()->id, $validated['receive_user_id']])
+                            ->whereIn('member_user_id', [$request->user()->id, $validated['receive_user_id']])
+                            ->first();
+
         $chat = Chat::create([
+            'chat_room_id' => $chatRoom->id,
             'message' => $validated['message'],
             'send_user_id' => $request->user()->id,
             'receive_user_id' => $validated['receive_user_id'],
         ]);
 
-        // broadcast(new ChatSent($request->user()->id, $validated['message'], now()));
-        broadcast(new ChatSent($request->user()->id, $request->user()->nickname, $validated['message'], now()));
+        broadcast(new ChatSent($chat, $request->user()->nickname, now()));
         return response()->json($chat);
-    }
-
-    public function load(Request $request)
-    {
-        // $chat = Chat::where('send_user_id', $request->send_user_id)
-        //     ->where('receive_user_id', $request->receive_user_id)
-        //     ->first();
-        
-        // $chats = Chat::where('send_user_id', $request->send_user_id)
-        //     ->where('receive_user_id', $request->receive_user_id)
-        //     ->get();
-
-        // return response()->json([
-        //     'chats' => $chats, 
-        //     'sendUser' => $chat->sendUser,
-        //     'receiveUser' => $chat->receiveUser,
-        // ]);
     }
 
     public function detail(Request $request)
@@ -137,11 +126,22 @@ class ChatController extends Controller
         $user = auth()->user();
         $chatPartnerId = $request->chatPartner;
 
-        $chats = Chat::where([['send_user_id', $user->id], ['receive_user_id', $chatPartnerId]])
-                        ->orWhere([['send_user_id', $chatPartnerId], ['receive_user_id', $user->id]])
+        //select chatRoom
+        $chatRoom = ChatRoom::whereIn('admin_user_id', [$user->id, $chatPartnerId])
+                            ->whereIn('member_user_id', [$user->id, $chatPartnerId])
+                            ->first();
+
+        if (empty($chatRoom)) {
+            $chatRoom = ChatRoom::create([
+                'admin_user_id' => $user->id,
+                'member_user_id' => $chatPartnerId,
+            ]);
+        }
+
+        $chats = Chat::where('chat_room_id', $chatRoom->id)
                         ->with('sendUser', 'receiveUser')
                         ->get();
 
-        return view('chat.detail', compact('chats', 'chatPartnerId'));
+        return view('chat.detail', compact('chats', 'chatPartnerId', 'chatRoom'));
     }
 }
