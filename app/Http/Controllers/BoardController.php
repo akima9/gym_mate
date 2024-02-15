@@ -28,6 +28,10 @@ class BoardController extends Controller
      */
     public function create(): View
     {
+        $user = auth()->user();
+        // if (empty($user->gym_id)) {
+        //     return $user->gym_id;
+        // }
         return view('board.create');
     }
 

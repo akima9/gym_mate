@@ -19,7 +19,7 @@ return new class extends Migration
             $table->string('password');
             $table->enum('gender', ['man', 'woman']);
             $table->integer('age');
-            $table->foreignId('gym_id')->constrained('gyms');
+            $table->foreignId('gym_id')->nullable()->constrained('gyms');
             $table->rememberToken();
             $table->timestamps();
         });
