@@ -5,9 +5,16 @@ namespace App\Http\Controllers;
 use App\Http\Requests\StoreGymRequest;
 use App\Http\Requests\UpdateGymRequest;
 use App\Models\Gym;
+use Illuminate\Http\Request;
 
 class GymController extends Controller
 {
+    public function find(Request $request)
+    {
+        $gyms = Gym::where('title', 'like', '%' . $request->title . '%')
+            ->get();
+        return response()->json($gyms);
+    }
     /**
      * Display a listing of the resource.
      */

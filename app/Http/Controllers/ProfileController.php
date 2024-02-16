@@ -37,6 +37,17 @@ class ProfileController extends Controller
         return Redirect::route('profile.edit')->with('status', 'profile-updated');
     }
 
+    public function updateForGym(Request $request)
+    {
+        $validated = $request->validate([
+            'gym_id' => 'required',
+        ]);
+        
+        $request->user()->gym_id = $validated['gym_id'];
+        $request->user()->save();
+        return Redirect::route('profile.edit')->with('status', 'gym-updated');
+    }
+
     /**
      * Delete the user's account.
      */

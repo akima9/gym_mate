@@ -13,4 +13,9 @@ class Gym extends Model
     {
         return $this->hasMany(Board::class);
     }
+
+    public function users()
+    {
+        return $this->hasMany(User::class, 'gym_id', 'id');
+    }
 }

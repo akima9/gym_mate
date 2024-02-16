@@ -13,44 +13,24 @@
         @csrf
     </form>
 
-    <form method="post" action="{{ route('profile.update') }}" class="mt-6 space-y-6">
+    <form method="post" action="{{ route('profile.updateForGym') }}" class="mt-6 space-y-6">
         @csrf
         @method('patch')
 
         <div>
-            <x-input-label for="nickname" :value="__('Nickname')" />
-            <x-text-input id="nickname" name="nickname" type="text" class="mt-1 block w-full" :value="old('nickname', $user->nickname)" required autofocus autocomplete="nickname" />
-            <x-input-error class="mt-2" :messages="$errors->get('nickname')" />
-        </div>
-
-        <div>
-            <x-input-label for="email" :value="__('Email')" />
-            <x-text-input id="email" name="email" type="email" class="mt-1 block w-full" :value="old('email', $user->email)" required autocomplete="username" />
-            <x-input-error class="mt-2" :messages="$errors->get('email')" />
-
-            @if ($user instanceof \Illuminate\Contracts\Auth\MustVerifyEmail && ! $user->hasVerifiedEmail())
-                <div>
-                    <p class="text-sm mt-2 text-gray-800">
-                        {{ __('Your email address is unverified.') }}
-
-                        <button form="send-verification" class="underline text-sm text-gray-600 hover:text-gray-900 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
-                            {{ __('Click here to re-send the verification email.') }}
-                        </button>
-                    </p>
-
-                    @if (session('status') === 'verification-link-sent')
-                        <p class="mt-2 font-medium text-sm text-green-600">
-                            {{ __('A new verification link has been sent to your email address.') }}
-                        </p>
-                    @endif
-                </div>
-            @endif
+            <x-input-label for="title" :value="__('Search GYM Name')" />
+            <x-text-input onkeyup="gymProfile.handleKeyPress()" id="title" name="title" type="text" class="mt-1 block w-full" :value="old('title', ($user->gym) ? $user->gym->title : '')" autofocus autocomplete="title" />
+            
+            <x-input-label for="gym_id" :value="__('Choose GYM Name')" class="mt-1" />
+            <select name="gym_id" id="gym_id" class="border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm mt-1 block w-full">
+            </select>
+            <x-input-error class="mt-2" :messages="$errors->get('gym_id')" />
         </div>
 
         <div class="flex items-center gap-4">
             <x-primary-button>{{ __('Save') }}</x-primary-button>
 
-            @if (session('status') === 'profile-updated')
+            @if (session('status') === 'gym-updated')
                 <p
                     x-data="{ show: true }"
                     x-show="show"
@@ -61,4 +41,41 @@
             @endif
         </div>
     </form>
+
+    @push('scripts')
+        <script>
+            const gymProfile = {
+                handleKeyPress: () => {
+                    let title = document.querySelector('#title').value;
+                    let url = "{{ route('gyms.find') }}";
+                    let data = {
+                        'title': title,
+                    };
+                    gymProfile.postData(url, data);
+                },
+                postData: (url, data) => {
+                    fetch(url, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                        },
+                        body: JSON.stringify(data)
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        document.querySelector("#gym_id").innerHTML = '';
+                        data.forEach(element => {
+                            console.log(element);
+                            let optionBox = document.createElement('option');
+                            optionBox.value = element.id;
+                            optionBox.textContent = element.title + ' (' + element.address + ')';
+                            document.querySelector("#gym_id").appendChild(optionBox);
+                        });
+                    })
+                    .catch(error => console.error('Error:', error));
+                },
+            };
+        </script>
+    @endpush
 </section>

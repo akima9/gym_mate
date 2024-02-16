@@ -69,4 +69,9 @@ class User extends Authenticatable
     {
         return $this->hasMany(ChatRoom::class, 'member_user_id', 'id');
     }
+
+    public function gym()
+    {
+        return $this->belongsTo(Gym::class, 'gym_id');
+    }
 }
