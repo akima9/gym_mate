@@ -5,12 +5,16 @@ namespace App\Http\Controllers;
 use App\Http\Requests\StoreBoardRequest;
 use App\Http\Requests\UpdateBoardRequest;
 use App\Models\Board;
+use App\Services\BoardService;
 use Illuminate\View\View;
 
 class BoardController extends Controller
 {
-    public function __construct()
+    private $boardService;
+
+    public function __construct(BoardService $boardService)
     {
+        $this->boardService = $boardService;
         $this->middleware('auth')->except(['index', 'show']);
     }
     /**
@@ -82,7 +86,8 @@ class BoardController extends Controller
             'content' => $validated['content'],
         ]);
         
-        $updatedBoard = Board::find($board->id);
+        // $updatedBoard = Board::find($board->id);
+        $updatedBoard = $this->boardService->findById($board->id);
 
         return redirect()->route('boards.show', ['board' => $updatedBoard]);
     }
