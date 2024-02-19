@@ -9,6 +9,7 @@ use App\Models\Board;
 use App\Models\Chat;
 use App\Models\ChatRoom;
 use App\Models\User;
+use App\Services\ChatRoomService;
 use App\Services\ChatService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -17,10 +18,12 @@ use Illuminate\View\View;
 class ChatController extends Controller
 {
     private $chatService;
+    private $chatRoomService;
 
-    public function __construct(ChatService $chatService)
+    public function __construct(ChatService $chatService, ChatRoomService $chatRoomService)
     {
         $this->chatService = $chatService;
+        $this->chatRoomService = $chatRoomService;
         $this->middleware('auth');
     }
     /**
@@ -37,21 +40,9 @@ class ChatController extends Controller
 
     public function send(SendChatRequest $request)
     {
-        $validated = $request->validated();
-
-
-        $chatRoom = ChatRoom::whereIn('admin_user_id', [$request->user()->id, $validated['receive_user_id']])
-                            ->whereIn('member_user_id', [$request->user()->id, $validated['receive_user_id']])
-                            ->first();
-
-        // $chat = Chat::create([
-        //     'chat_room_id' => $chatRoom->id,
-        //     'message' => $validated['message'],
-        //     'send_user_id' => $request->user()->id,
-        //     'receive_user_id' => $validated['receive_user_id'],
-        // ]);
+        $request->validated();
+        $chatRoom = $this->chatRoomService->findChatRoom($request->user()->id, $request['receive_user_id']);
         $chat = $this->chatService->save($chatRoom, $request);
-
         broadcast(new ChatSent($chat, $request->user()->nickname, now()));
         return response()->json($chat);
     }
@@ -60,24 +51,11 @@ class ChatController extends Controller
     {
         $user = auth()->user();
         $chatPartnerId = $request->chatPartner;
-
-        //select chatRoom
-        $chatRoom = ChatRoom::whereIn('admin_user_id', [$user->id, $chatPartnerId])
-                            ->whereIn('member_user_id', [$user->id, $chatPartnerId])
-                            ->first();
-
+        $chatRoom = $this->chatRoomService->findChatRoom($user->id, $chatPartnerId);
         if (empty($chatRoom)) {
-            $chatRoom = ChatRoom::create([
-                'admin_user_id' => $user->id,
-                'member_user_id' => $chatPartnerId,
-            ]);
+            $chatRoom = $this->chatRoomService->save($user->id, $chatPartnerId);
         }
-
-        // $chats = Chat::where('chat_room_id', $chatRoom->id)
-        //                 ->with('sendUser', 'receiveUser')
-        //                 ->get();
         $chats = $this->chatService->findByChatRoomId($chatRoom->id);
-
         return view('chat.detail', compact('chats', 'chatPartnerId', 'chatRoom'));
     }
 }
