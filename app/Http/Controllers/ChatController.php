@@ -9,14 +9,18 @@ use App\Models\Board;
 use App\Models\Chat;
 use App\Models\ChatRoom;
 use App\Models\User;
+use App\Services\ChatService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\View\View;
 
 class ChatController extends Controller
 {
-    public function __construct()
+    private $chatService;
+
+    public function __construct(ChatService $chatService)
     {
+        $this->chatService = $chatService;
         $this->middleware('auth');
     }
     /**
@@ -25,24 +29,9 @@ class ChatController extends Controller
     public function index(): View
     {
         $user = auth()->user();
-
-        $chats = Chat::where('send_user_id', $user->id)
-                        ->orWhere('receive_user_id', $user->id)
-                        ->with('sendUser', 'receiveUser')
-                        ->latest('created_at')
-                        ->get();
-
-        $chatPartners = $chats->flatMap(function ($chat) use ($user) {
-            return ($chat->send_user_id === $user->id) ? [$chat->receiveUser] : [$chat->sendUser];
-        })->unique('id');
-
-        $latestMessages = [];
-        foreach ($chatPartners as $partner) {
-            $latestMessages[$partner->id] = $chats->filter(function ($chat) use ($partner) {
-                return $chat->send_user_id === $partner->id || $chat->receive_user_id === $partner->id;
-            })->first();
-        }
-
+        $chats = $this->chatService->findChats($user->id);
+        $chatPartners = $this->chatService->findChatPartners($chats, $user);
+        $latestMessages = $this->chatService->findLastMessages($chats, $chatPartners);
         return view('chat.index', compact('user', 'chatPartners', 'latestMessages'));
     }
 
@@ -55,12 +44,13 @@ class ChatController extends Controller
                             ->whereIn('member_user_id', [$request->user()->id, $validated['receive_user_id']])
                             ->first();
 
-        $chat = Chat::create([
-            'chat_room_id' => $chatRoom->id,
-            'message' => $validated['message'],
-            'send_user_id' => $request->user()->id,
-            'receive_user_id' => $validated['receive_user_id'],
-        ]);
+        // $chat = Chat::create([
+        //     'chat_room_id' => $chatRoom->id,
+        //     'message' => $validated['message'],
+        //     'send_user_id' => $request->user()->id,
+        //     'receive_user_id' => $validated['receive_user_id'],
+        // ]);
+        $chat = $this->chatService->save($chatRoom, $request);
 
         broadcast(new ChatSent($chat, $request->user()->nickname, now()));
         return response()->json($chat);
@@ -83,9 +73,10 @@ class ChatController extends Controller
             ]);
         }
 
-        $chats = Chat::where('chat_room_id', $chatRoom->id)
-                        ->with('sendUser', 'receiveUser')
-                        ->get();
+        // $chats = Chat::where('chat_room_id', $chatRoom->id)
+        //                 ->with('sendUser', 'receiveUser')
+        //                 ->get();
+        $chats = $this->chatService->findByChatRoomId($chatRoom->id);
 
         return view('chat.detail', compact('chats', 'chatPartnerId', 'chatRoom'));
     }

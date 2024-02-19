@@ -44,14 +44,18 @@
         <script>
             const mateBoard = {
                 checkGym: () => {
-                    let gym_id = "{{auth()->user()->gym_id}}";
-                    if (!gym_id) {
-                        if (confirm('GYM 설정 후 작성 가능합니다.')) {
-                            self.location = "{{route('profile.edit')}}";
+                    @auth
+                        let gym_id = "{{auth()->user()->gym_id}}";
+                        if (!gym_id) {
+                            if (confirm('GYM 설정 후 작성 가능합니다.')) {
+                                self.location = "{{route('profile.edit')}}";
+                            }
+                        } else {
+                            self.location = "{{route('boards.create')}}";
                         }
-                    } else {
+                    @else
                         self.location = "{{route('boards.create')}}";
-                    }
+                    @endauth
                 }
             }
         </script>
