@@ -22,8 +22,7 @@ class BoardController extends Controller
      */
     public function index(): View
     {
-        $boards = Board::orderBy('id', 'desc')->paginate(10);
-
+        $boards = $this->boardService->getBoardsPerPage(10);
         return view('board.index', ['boards' => $boards]);
     }
 
@@ -33,9 +32,6 @@ class BoardController extends Controller
     public function create(): View
     {
         $user = auth()->user();
-        // if (empty($user->gym_id)) {
-        //     return $user->gym_id;
-        // }
         return view('board.create');
     }
 
@@ -44,15 +40,8 @@ class BoardController extends Controller
      */
     public function store(StoreBoardRequest $request)
     {
-        $validated = $request->validated();
-        
-        $board = Board::create([
-            'title' => $validated['title'],
-            'content' => $validated['content'],
-            'user_id' => $request->user()->id,
-            'gym_id' => $request->user()->gym_id,
-        ]);
-
+        $request->validated();
+        $board = $this->boardService->save($request);
         return redirect()->route('boards.show', ['board' => $board]);        
     }
 
@@ -79,16 +68,9 @@ class BoardController extends Controller
     public function update(UpdateBoardRequest $request, Board $board)
     {
         $this->authorize('update', $board);
-        $validated = $request->validated();
-        
-        Board::where('id', $board->id)->update([
-            'title' => $validated['title'],
-            'content' => $validated['content'],
-        ]);
-        
-        // $updatedBoard = Board::find($board->id);
+        $request->validated();
+        $this->boardService->update($board, $request);
         $updatedBoard = $this->boardService->findById($board->id);
-
         return redirect()->route('boards.show', ['board' => $updatedBoard]);
     }
 
@@ -98,8 +80,7 @@ class BoardController extends Controller
     public function destroy(Board $board)
     {
         $this->authorize('delete', $board);
-        Board::destroy($board->id);
-
+        $this->boardService->delete($board->id);
         return redirect()->route('boards.index');
     }
 }

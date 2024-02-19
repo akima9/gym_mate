@@ -10,7 +10,7 @@
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                 <div class="p-6 text-gray-900">
                     <div class="flex justify-end">
-                        <x-primary-anchor :href="route('boards.create')">글쓰기</x-primary-anchor>
+                        <x-secondary-button onclick="mateBoard.checkGym()">글쓰기</x-secondary-button>
                     </div>
                     @foreach ($boards as $board)
                         <div class="border border-inherit p-3 mt-5 hover:bg-slate-50">
@@ -39,4 +39,21 @@
             </div>
         </div>
     </div>
+
+    @push('scripts')
+        <script>
+            const mateBoard = {
+                checkGym: () => {
+                    let gym_id = "{{auth()->user()->gym_id}}";
+                    if (!gym_id) {
+                        if (confirm('GYM 설정 후 작성 가능합니다.')) {
+                            self.location = "{{route('profile.edit')}}";
+                        }
+                    } else {
+                        self.location = "{{route('boards.create')}}";
+                    }
+                }
+            }
+        </script>
+    @endpush
 </x-app-layout>
