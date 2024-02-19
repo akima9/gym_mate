@@ -6,6 +6,7 @@ use App\Http\Requests\StoreBoardRequest;
 use App\Http\Requests\UpdateBoardRequest;
 use App\Models\Board;
 use App\Services\BoardService;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\View\View;
 
 class BoardController extends Controller
@@ -38,7 +39,7 @@ class BoardController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(StoreBoardRequest $request)
+    public function store(StoreBoardRequest $request): RedirectResponse
     {
         $request->validated();
         $board = $this->boardService->save($request);
@@ -48,7 +49,7 @@ class BoardController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Board $board)
+    public function show(Board $board): View
     {
         return view('board.show', ['board' => $board]);
     }
@@ -56,7 +57,7 @@ class BoardController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Board $board)
+    public function edit(Board $board): View
     {
         $this->authorize('update', $board);
         return view('board.edit', ['board' => $board]);
@@ -65,7 +66,7 @@ class BoardController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdateBoardRequest $request, Board $board)
+    public function update(UpdateBoardRequest $request, Board $board): RedirectResponse
     {
         $this->authorize('update', $board);
         $request->validated();
@@ -77,7 +78,7 @@ class BoardController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Board $board)
+    public function destroy(Board $board): RedirectResponse
     {
         $this->authorize('delete', $board);
         $this->boardService->delete($board->id);
