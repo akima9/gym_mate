@@ -25,6 +25,9 @@ class BoardService
 
     public function save($request)
     {
+        if (empty($request->user()->gym_id)) {
+            return null;
+        }
         return $this->boardRepository->save($request);
     }
 

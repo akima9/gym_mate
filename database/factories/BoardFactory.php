@@ -17,7 +17,8 @@ class BoardFactory extends Factory
     public function definition(): array
     {
         return [
-            //
+            'title' => fake()->text(),
+            'content' => fake()->text(),
         ];
     }
 }

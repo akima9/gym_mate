@@ -43,6 +43,9 @@ class BoardController extends Controller
     {
         $request->validated();
         $board = $this->boardService->save($request);
+        if (empty($board)) {
+            return redirect()->route('profile.edit');
+        }
         return redirect()->route('boards.show', ['board' => $board]);        
     }
 
