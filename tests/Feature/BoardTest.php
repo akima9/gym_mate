@@ -268,7 +268,6 @@ class BoardTest extends TestCase
         //Act
         $response = $this->actingAs($user)->delete(route('boards.destroy', ['board' => $board]));
 
-        $response->dump();
         //Assert
         $response->assertStatus(302);
         $response->assertRedirectToRoute('boards.index');
