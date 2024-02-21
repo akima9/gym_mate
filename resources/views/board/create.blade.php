@@ -17,7 +17,20 @@
                             <x-input-error class="mt-2" :messages="$errors->get('title')" />
                         </div>
                         <div class="mb-4">
-                            <x-input-label for="content" :value="__('본문')" />
+                            <x-input-label for="" :value="__('운동 일자')" />
+                            <input type="date" name="" id="" class="mt-1 block border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm">
+                        </div>
+                        <div class="mb-4">
+                            <x-input-label for="" :value="__('운동 시간')" />
+                            <input type="time" name="" id="" class="mt-1 border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm">
+                            ~
+                            <input type="time" name="" id="" class="mt-1 border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm">
+                        </div>
+                        <div class="mb-4">
+                            <x-input-label for="" :value="__('운동 부위')" />
+                        </div>
+                        <div class="mb-4">
+                            <x-input-label for="content" :value="__('추가 내용')" />
                             <x-text-area id="content" name="content" type="text" class="mt-1 block w-full" required autofocus autocomplete="content" />
                             <x-input-error class="mt-2" :messages="$errors->get('content')" />
                         </div>
