@@ -16,7 +16,7 @@ class BoardController extends Controller
     public function __construct(BoardService $boardService)
     {
         $this->boardService = $boardService;
-        $this->middleware('auth')->except(['index', 'show']);
+        $this->middleware(['auth', 'verified'])->except(['index', 'show']);
     }
     /**
      * Display a listing of the resource.

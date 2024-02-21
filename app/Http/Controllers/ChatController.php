@@ -24,7 +24,7 @@ class ChatController extends Controller
     {
         $this->chatService = $chatService;
         $this->chatRoomService = $chatRoomService;
-        $this->middleware('auth');
+        $this->middleware(['auth', 'verified']);
     }
     /**
      * Display a listing of the resource.
