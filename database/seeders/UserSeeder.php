@@ -13,19 +13,19 @@ class UserSeeder extends Seeder
      */
     public function run(): void
     {
-        User::create([
-            'nickname' => '즐망',
-            'email' => 'akima9a@gmail.com',
-            'password' => '1',
-            'gender' => 'man',
-            'age' => 30,
-        ]);
-        User::create([
-            'nickname' => '테스터',
-            'email' => 'dev.giyong@gmail.com',
-            'password' => '1',
-            'gender' => 'man',
-            'age' => 30,
-        ]);
+        // User::create([
+        //     'nickname' => '즐망',
+        //     'email' => 'akima9a@gmail.com',
+        //     'password' => '1',
+        //     'gender' => 'man',
+        //     'age' => 30,
+        // ]);
+        // User::create([
+        //     'nickname' => '테스터',
+        //     'email' => 'dev.giyong@gmail.com',
+        //     'password' => '1',
+        //     'gender' => 'man',
+        //     'age' => 30,
+        // ]);
     }
 }
