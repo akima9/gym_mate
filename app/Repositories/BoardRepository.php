@@ -18,12 +18,29 @@ class BoardRepository
 
     public function save($request)
     {
-        return Board::create([
-            'title' => $request['title'],
-            'content' => $request['content'],
-            'user_id' => $request->user()->id,
-            'gym_id' => $request->user()->gym_id,
-        ]);
+        if (empty($request['content'])) {
+            return Board::create([
+                'title' => $request['title'],
+                'trainingDate' => $request['trainingDate'],
+                'trainingStartTime' => $request['trainingStartTime'],
+                'trainingEndTime' => $request['trainingEndTime'],
+                'trainingParts' => $request['trainingParts'],
+                'user_id' => $request->user()->id,
+                'gym_id' => $request->user()->gym_id,
+            ]);
+        } else {
+            return Board::create([
+                'title' => $request['title'],
+                'trainingDate' => $request['trainingDate'],
+                'trainingStartTime' => $request['trainingStartTime'],
+                'trainingEndTime' => $request['trainingEndTime'],
+                'trainingParts' => $request['trainingParts'],
+                'content' => $request['content'],
+                'user_id' => $request->user()->id,
+                'gym_id' => $request->user()->gym_id,
+            ]);
+
+        }
     }
 
     public function update($board, $request)

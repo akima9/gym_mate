@@ -18,7 +18,7 @@ return new class extends Migration
             $table->time('trainingStartTime');
             $table->time('trainingEndTime');
             $table->string('trainingParts');
-            $table->string('content');
+            $table->string('content')->nullable();
             $table->enum('status', ['running', 'done'])->default('running');
             $table->foreignId('user_id')->constrained('users')->cascadeOnDelete();
             $table->foreignId('gym_id')->constrained('gyms')->cascadeOnDelete();

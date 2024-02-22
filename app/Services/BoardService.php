@@ -28,6 +28,7 @@ class BoardService
         if (empty($request->user()->gym_id)) {
             return null;
         }
+        $request['trainingParts'] = implode(',', $request['trainingParts']);
         return $this->boardRepository->save($request);
     }
 

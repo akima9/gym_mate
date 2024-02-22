@@ -30,9 +30,12 @@ class BoardController extends Controller
     /**
      * Show the form for creating a new resource.
      */
-    public function create(): View
+    public function create()
     {
         $user = auth()->user();
+        if (empty($user->gym_id)) {
+            return redirect()->route('profile.edit');
+        }
         return view('board.create');
     }
 

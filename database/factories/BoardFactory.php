@@ -18,6 +18,10 @@ class BoardFactory extends Factory
     {
         return [
             'title' => fake()->text(),
+            'trainingDate' => fake()->date(),
+            'trainingStartTime' => fake()->time(),
+            'trainingEndTime' => fake()->time(),
+            'trainingParts' => 'chest,abs',
             'content' => fake()->text(),
         ];
     }

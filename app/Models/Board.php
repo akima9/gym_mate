@@ -9,7 +9,7 @@ class Board extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['title', 'content', 'user_id', 'gym_id'];
+    protected $fillable = ['title', 'trainingDate', 'trainingStartTime', 'trainingEndTime', 'trainingParts', 'content', 'user_id', 'gym_id'];
 
     public function user()
     {

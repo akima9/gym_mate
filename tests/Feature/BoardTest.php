@@ -33,10 +33,12 @@ class BoardTest extends TestCase
         $response->assertRedirectToRoute('login');
     }
     
-    public function test_03_로그인_O_메이트_모집_게시물_작성_페이지_접속_가능(): void
+    public function test_03_로그인_O_GYM_설정_O_메이트_모집_게시물_작성_페이지_접속_가능(): void
     {
+        //Create a gym using the factory
+        $gym = Gym::factory()->create();
         //Create a user using the factory
-        $user = User::factory()->create();
+        $user = User::factory()->create(['gym_id' => $gym->id]);
 
         //Act
         $response = $this->actingAs($user)->get(route('boards.create'));
@@ -46,16 +48,13 @@ class BoardTest extends TestCase
         $response->assertViewIs('board.create');
     }
 
-    public function test_04_로그인_O_GYM_설정_X_메이트_모집_게시물_작성시_프로필_편집_페이지로_이동(): void
+    public function test_04_로그인_O_GYM_설정_X_메이트_모집_게시물_작성_페이지_접속시_프로필_편집_페이지로_이동(): void
     {
         //Create a user using the factory
         $user = User::factory()->create();
 
         //Act
-        $response = $this->actingAs($user)->post(route('boards.store'), [
-            'title' => '제목입니다.',
-            'content' => '내용입니다.',
-        ]);
+        $response = $this->actingAs($user)->get(route('boards.create'));
 
         //Assert
         $response->assertStatus(302);
@@ -72,8 +71,12 @@ class BoardTest extends TestCase
         
         //Act
         $response = $this->actingAs($user)->post(route('boards.store'), [
-            'title' => '제목입니다.',
-            'content' => '내용입니다.',
+            'title' => '제목',
+            'trainingDate' => '2024-02-23',
+            'trainingStartTime' => '01:00:00',
+            'trainingEndTime' => '03:00:00',
+            'trainingParts' => ['chest', 'shoulder'],
+            'content' => '추가내용',
         ]);
         
         //Assert
@@ -81,8 +84,12 @@ class BoardTest extends TestCase
         $response->assertStatus(302);
         $response->assertRedirectToRoute('boards.show', ['board' => $board]);
         $this->assertDatabaseHas('boards', [
-            'title' => '제목입니다.',
-            'content' => '내용입니다.',
+            'title' => '제목',
+            'trainingDate' => '2024-02-23',
+            'trainingStartTime' => '01:00:00',
+            'trainingEndTime' => '03:00:00',
+            'trainingParts' => 'chest,shoulder',
+            'content' => '추가내용',
         ]);
     }
 
