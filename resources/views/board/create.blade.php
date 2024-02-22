@@ -13,18 +13,21 @@
                         @csrf
                         <div class="mb-4">
                             <x-input-label for="title" :value="__('제목')" />
-                            <x-text-input id="title" name="title" type="text" class="mt-1 block w-full" required autofocus autocomplete="title" />
+                            <x-text-input :value="old('title')" id="title" name="title" type="text" class="mt-1 block w-full" required autofocus autocomplete="title" />
                             <x-input-error class="mt-2" :messages="$errors->get('title')" />
                         </div>
                         <div class="mb-4">
                             <x-input-label for="trainingDate" :value="__('운동 일자')" />
-                            <input type="date" name="trainingDate" id="trainingDate" class="mt-1 block border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm">
+                            <input type="date" name="trainingDate" id="trainingDate" class="mt-1 block border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm" value="{{old('trainingDate')}}">
+                            <x-input-error class="mt-2" :messages="$errors->get('trainingDate')" />
                         </div>
                         <div class="mb-4">
                             <x-input-label for="trainingTime" :value="__('운동 시간')" />
-                            <input type="time" name="trainingStartTime" id="trainingStartTime" class="mt-1 border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm">
+                            <input type="time" name="trainingStartTime" id="trainingStartTime" class="mt-1 border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm" value="{{old('trainingStartTime')}}">
                             ~
-                            <input type="time" name="trainingEndTime" id="trainingEndTime" class="mt-1 border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm">
+                            <input type="time" name="trainingEndTime" id="trainingEndTime" class="mt-1 border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm" value="{{old('trainingEndTime')}}">
+                            <x-input-error class="mt-2" :messages="$errors->get('trainingStartTime')" />
+                            <x-input-error class="mt-2" :messages="$errors->get('trainingEndTime')" />
                         </div>
                         <div class="mb-4">
                             <x-input-label for="trainingPart" :value="__('운동 부위')" />
@@ -39,11 +42,11 @@
                                 <option value="abs">복부</option>
                             </select>
                             <div class="trainingParts"></div>
+                            <x-input-error class="mt-2" :messages="$errors->get('trainingParts')" />
                         </div>
                         <div class="mb-4">
                             <x-input-label for="content" :value="__('추가 내용')" />
-                            <x-text-area id="content" name="content" type="text" class="mt-1 block w-full" required autofocus autocomplete="content" />
-                            <x-input-error class="mt-2" :messages="$errors->get('content')" />
+                            <x-text-area id="content" name="content" type="text" class="mt-1 block w-full" autofocus autocomplete="content" />
                         </div>
                         <x-primary-button>{{ __('등록') }}</x-primary-button>
                     </form>
@@ -70,6 +73,7 @@
                     let trainingPartsDiv = document.querySelector('.trainingParts');
                     let hiddenInput = document.createElement('input');
                     hiddenInput.type = 'hidden';
+                    hiddenInput.name = 'trainingParts[]';
                     hiddenInput.value = selectedValue;
                     hiddenInput.className = selectedValue;
                     trainingPartsDiv.appendChild(hiddenInput);

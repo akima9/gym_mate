@@ -14,6 +14,10 @@ return new class extends Migration
         Schema::create('boards', function (Blueprint $table) {
             $table->id();
             $table->string('title');
+            $table->date('trainingDate');
+            $table->time('trainingStartTime');
+            $table->time('trainingEndTime');
+            $table->string('trainingParts');
             $table->string('content');
             $table->enum('status', ['running', 'done'])->default('running');
             $table->foreignId('user_id')->constrained('users')->cascadeOnDelete();
