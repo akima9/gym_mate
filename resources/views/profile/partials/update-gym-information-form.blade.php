@@ -9,17 +9,25 @@
         </p>
     </header>
 
-    <form id="send-verification" method="post" action="{{ route('verification.send') }}">
-        @csrf
-    </form>
-
     <form method="post" action="{{ route('profile.updateForGym') }}" class="mt-6 space-y-6">
         @csrf
         @method('patch')
 
         <div>
+            <x-input-label for="title" :value="__('현재 GYM')" />
+            @if (empty($user->gym_id))
+                <p class="mt-1 text-sm text-gray-600">
+                    GYM을 설정하지 않았습니다.
+                </p>
+            @else
+                <p class="mt-1 text-sm text-gray-600">
+                    {{$user->gym->title}}
+                </p>
+            @endif
+        </div>
+        <div>
             <x-input-label for="title" :value="__('GYM 검색')" />
-            <x-text-input onkeyup="gymProfile.handleKeyPress()" id="title" name="title" type="text" class="mt-1 block w-full" :value="old('title', ($user->gym) ? $user->gym->title : '')" autofocus autocomplete="title" />
+            <x-text-input onkeyup="gymProfile.handleKeyPress()" id="title" name="title" type="text" class="mt-1 block w-full" :value="old('title')" autofocus autocomplete="title" />
         </div>
         <div>
             <x-input-label for="gym_id" :value="__('GYM 선택')" />
@@ -52,7 +60,9 @@
                     let data = {
                         'title': title,
                     };
-                    gymProfile.postData(url, data);
+                    if (title.length > 0) {
+                        gymProfile.postData(url, data);
+                    }
                 },
                 postData: (url, data) => {
                     fetch(url, {

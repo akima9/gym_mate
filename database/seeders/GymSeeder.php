@@ -17,5 +17,9 @@ class GymSeeder extends Seeder
             'title' => '세인트짐',
             'address' => '서울특별시 송파구 송파동 19-2 지하1층',
         ]);
+        Gym::create([
+            'title' => '인트짐',
+            'address' => '서울특별시 송파구 송파동 19-2 지하1층',
+        ]);
     }
 }
