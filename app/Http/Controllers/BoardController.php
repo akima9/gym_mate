@@ -24,7 +24,16 @@ class BoardController extends Controller
     public function index(): View
     {
         $boards = $this->boardService->getBoardsPerPage(10);
-        return view('board.index', ['boards' => $boards]);
+        $trainingPartsConfig = [
+            'chest' => '가슴',
+            'back' => '등',
+            'shoulder' => '어깨',
+            'lowerBody' => '하체',
+            'biceps' => '이두',
+            'triceps' => '삼두',
+            'abs' => '복부',
+        ];
+        return view('board.index', ['boards' => $boards, 'trainingPartsConfig' => $trainingPartsConfig]);
     }
 
     /**

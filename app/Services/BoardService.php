@@ -20,7 +20,12 @@ class BoardService
 
     public function getBoardsPerPage($listCount)
     {
-        return $this->boardRepository->getBoardsPerPage($listCount);
+        // return $this->boardRepository->getBoardsPerPage($listCount);
+        $boards = $this->boardRepository->getBoardsPerPage($listCount);
+        foreach ($boards as $board) {
+            $board->trainingParts = explode(',', $board->trainingParts);
+        }
+        return $boards;
     }
 
     public function save($request)
