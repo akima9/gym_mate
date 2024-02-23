@@ -1,7 +1,7 @@
 <x-app-layout>
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-            BOARD INDEX
+            게시판
         </h2>
     </x-slot>
 
@@ -19,12 +19,17 @@
                                     {{$board->created_at->diffForHumans()}}
                                 </p>
                                 <h2 class="text-lg font-medium text-gray-900">
-                                    {{$board->title}}
                                     @if ($board->status === 'running')
                                         <span class="inline-flex items-center rounded-md bg-blue-50 px-2 py-1 text-xs font-medium text-blue-700 ring-1 ring-inset ring-blue-700/10">모집중</span>
+                                        @if ($board->user->gender === 'man')
+                                            <span class="inline-flex items-center rounded-md bg-blue-50 px-2 py-1 text-xs font-medium text-blue-700 ring-1 ring-inset ring-blue-700/10">남자</span>
+                                        @else
+                                            <span class="inline-flex items-center rounded-md bg-blue-50 px-2 py-1 text-xs font-medium text-blue-700 ring-1 ring-inset ring-blue-700/10">여자</span>
+                                        @endif
                                     @else
                                         <span class="inline-flex items-center rounded-md bg-gray-50 px-2 py-1 text-xs font-medium text-gray-600 ring-1 ring-inset ring-gray-500/10">모집마감</span>
                                     @endif
+                                    {{$board->title}}
                                 </h2>
                                 <div>
                                     <p class="mt-2 text-sm">

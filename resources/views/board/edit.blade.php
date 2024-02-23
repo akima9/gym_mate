@@ -1,7 +1,7 @@
 <x-app-layout>
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-            BOARD EDIT
+            게시글 수정
         </h2>
     </x-slot>
 
