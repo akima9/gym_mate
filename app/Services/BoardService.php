@@ -20,10 +20,9 @@ class BoardService
 
     public function getBoardsPerPage($listCount)
     {
-        // return $this->boardRepository->getBoardsPerPage($listCount);
         $boards = $this->boardRepository->getBoardsPerPage($listCount);
         foreach ($boards as $board) {
-            $board->trainingParts = explode(',', $board->trainingParts);
+            $board->trainingParts = json_decode($board->trainingParts);
         }
         return $boards;
     }
@@ -33,12 +32,13 @@ class BoardService
         if (empty($request->user()->gym_id)) {
             return null;
         }
-        $request['trainingParts'] = implode(',', $request['trainingParts']);
+        $request['trainingParts'] = json_encode($request['trainingParts'], JSON_UNESCAPED_UNICODE);
         return $this->boardRepository->save($request);
     }
 
     public function update($board, $request)
     {
+        $request['trainingParts'] = json_encode($request['trainingParts'], JSON_UNESCAPED_UNICODE);
         return $this->boardRepository->update($board, $request);
     }
 

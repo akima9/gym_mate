@@ -39,17 +39,33 @@ class BoardRepository
                 'user_id' => $request->user()->id,
                 'gym_id' => $request->user()->gym_id,
             ]);
-
         }
     }
 
     public function update($board, $request)
     {
-        return Board::where('id', $board->id)
+        if (empty($request['content'])) {
+            return Board::where('id', $board->id)
                     ->update([
                         'title' => $request['title'],
+                        'trainingDate' => $request['trainingDate'],
+                        'trainingStartTime' => $request['trainingStartTime'],
+                        'trainingEndTime' => $request['trainingEndTime'],
+                        'trainingParts' => $request['trainingParts'],
+                        'status' => $request['status'],
+                    ]);
+        } else {
+            return Board::where('id', $board->id)
+                    ->update([
+                        'title' => $request['title'],
+                        'trainingDate' => $request['trainingDate'],
+                        'trainingStartTime' => $request['trainingStartTime'],
+                        'trainingEndTime' => $request['trainingEndTime'],
+                        'trainingParts' => $request['trainingParts'],
+                        'status' => $request['status'],
                         'content' => $request['content'],
                     ]);
+        }
     }
 
     public function delete($id)

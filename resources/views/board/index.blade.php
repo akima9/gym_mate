@@ -13,7 +13,7 @@
                         <x-secondary-button onclick="mateBoard.checkGym()">글쓰기</x-secondary-button>
                     </div>
                     @foreach ($boards as $board)
-                        <div class="border border-inherit p-3 mt-5 hover:bg-slate-50">
+                        <div class="border border-inherit p-3 mt-5 hover:bg-slate-50 rounded">
                             <a href="{{route('boards.show', ['board' => $board])}}">
                                 <p class="mt-1 text-sm text-gray-600">
                                     {{$board->created_at->diffForHumans()}}
@@ -31,8 +31,8 @@
                                         {{$board->trainingDate}} {{$board->trainingStartTime}} ~ {{$board->trainingEndTime}}
                                     </p>
                                     <div class="mt-1">
-                                        @foreach ($board->trainingParts as $trainingPart)
-                                            <span class="inline-flex items-center rounded-md bg-blue-50 px-2 py-1 text-xs font-medium text-blue-700 ring-1 ring-inset ring-blue-700/10">{{$trainingPartsConfig[$trainingPart]}}</span>
+                                        @foreach ($board->trainingParts as $value => $text)
+                                            <span class="inline-flex items-center rounded-md bg-blue-50 px-2 py-1 text-xs font-medium text-blue-700 ring-1 ring-inset ring-blue-700/10">{{$text}}</span>
                                         @endforeach
                                     </div>
                                 </div>

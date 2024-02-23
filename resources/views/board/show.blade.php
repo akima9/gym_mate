@@ -36,8 +36,24 @@
                     </p>
                     <h2 class="text-lg font-medium text-gray-900 mb-5">
                         {{$board->title}}
+                        @if ($board->status === 'running')
+                            <span class="inline-flex items-center rounded-md bg-blue-50 px-2 py-1 text-xs font-medium text-blue-700 ring-1 ring-inset ring-blue-700/10">모집중</span>
+                        @else
+                            <span class="inline-flex items-center rounded-md bg-gray-50 px-2 py-1 text-xs font-medium text-gray-600 ring-1 ring-inset ring-gray-500/10">모집마감</span>
+                        @endif
                     </h2>
-                    <p class="mt-1 text-sm text-gray-600 leading-loose">
+                    <div>
+                        <p class="mt-2">
+                            운동 일자: {{$board->trainingDate}} {{$board->trainingStartTime}} ~ {{$board->trainingEndTime}}
+                        </p>
+                        <div class="mt-1">
+                            운동 부위: 
+                            @foreach ($board->trainingParts as $value => $text)
+                                <span class="inline-flex items-center rounded-md bg-blue-50 px-2 py-1 text-xs font-medium text-blue-700 ring-1 ring-inset ring-blue-700/10">{{$text}}</span>
+                            @endforeach
+                        </div>
+                    </div>
+                    <p class="mt-5 leading-loose">
                         {!!nl2br(e($board->content))!!}
                     </p>
                     <div class="flex space-x-4 justify-start mt-5">

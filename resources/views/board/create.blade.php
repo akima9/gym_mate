@@ -73,8 +73,8 @@
                     let trainingPartsDiv = document.querySelector('.trainingParts');
                     let hiddenInput = document.createElement('input');
                     hiddenInput.type = 'hidden';
-                    hiddenInput.name = 'trainingParts[]';
-                    hiddenInput.value = selectedValue;
+                    hiddenInput.name = 'trainingParts['+selectedValue+']';
+                    hiddenInput.value = selectedText;
                     hiddenInput.className = selectedValue;
                     trainingPartsDiv.appendChild(hiddenInput);
                 },

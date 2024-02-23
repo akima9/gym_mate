@@ -21,7 +21,7 @@ class BoardFactory extends Factory
             'trainingDate' => fake()->date(),
             'trainingStartTime' => fake()->time(),
             'trainingEndTime' => fake()->time(),
-            'trainingParts' => 'chest,abs',
+            'trainingParts' => json_encode(['chest' => '가슴', 'abs' => '복부']),
             'content' => fake()->text(),
         ];
     }

@@ -23,7 +23,10 @@ class UpdateBoardRequest extends FormRequest
     {
         return [
             'title' => ['required'],
-            'content' => ['required'],
+            'trainingDate' => ['required'],
+            'trainingStartTime' => ['required'],
+            'trainingEndTime' => ['required'],
+            'trainingParts' => ['required'],
         ];
     }
 }

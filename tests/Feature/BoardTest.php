@@ -75,12 +75,13 @@ class BoardTest extends TestCase
             'trainingDate' => '2024-02-23',
             'trainingStartTime' => '01:00:00',
             'trainingEndTime' => '03:00:00',
-            'trainingParts' => ['chest', 'shoulder'],
+            'trainingParts' => ['chest' => '가슴', 'shoulder' => '어깨'],
             'content' => '추가내용',
         ]);
         
         //Assert
         $board = Board::latest()->first();
+        $this->assertEquals("{\"chest\": \"가슴\", \"shoulder\": \"어깨\"}", $board->trainingParts);
         $response->assertStatus(302);
         $response->assertRedirectToRoute('boards.show', ['board' => $board]);
         $this->assertDatabaseHas('boards', [
@@ -88,7 +89,6 @@ class BoardTest extends TestCase
             'trainingDate' => '2024-02-23',
             'trainingStartTime' => '01:00:00',
             'trainingEndTime' => '03:00:00',
-            'trainingParts' => 'chest,shoulder',
             'content' => '추가내용',
         ]);
     }
@@ -195,6 +195,10 @@ class BoardTest extends TestCase
         //Act
         $response = $this->actingAs($otherUser)->put(route('boards.update', ['board' => $board]), [
             'title' => '제목수정',
+            'trainingDate' => fake()->date(),
+            'trainingStartTime' => fake()->time(),
+            'trainingEndTime' => fake()->time(),
+            'trainingParts' => ['chest' => '가슴', 'abs' => '복부'],
             'content' => '내용수정',
         ]);
 
@@ -215,14 +219,22 @@ class BoardTest extends TestCase
         //Act
         $response = $this->actingAs($user)->put(route('boards.update', ['board' => $board]), [
             'title' => '제목수정',
+            'trainingDate' => fake()->date(),
+            'trainingStartTime' => fake()->time(),
+            'trainingEndTime' => fake()->time(),
+            'trainingParts' => ['chest' => '가슴', 'abs' => '복부'],
+            'status' => 'running',
             'content' => '내용수정',
         ]);
 
+        $board = Board::latest()->first();
         //Assert
+        $this->assertEquals("{\"abs\": \"복부\", \"chest\": \"가슴\"}", $board->trainingParts);
         $response->assertStatus(302);
         $response->assertRedirectToRoute('boards.show', ['board' => $board]);
         $this->assertDatabaseHas('boards', [
             'title' => '제목수정',
+            'status' => 'running',
             'content' => '내용수정',
         ]);
     }
@@ -245,7 +257,7 @@ class BoardTest extends TestCase
         $this->expectsDatabaseQueryCount(0);
     }
     
-    public function test_13_로그인_O_다른_유저의_메이트_모집_게시물_삭제_불가능(): void
+    public function test_14_로그인_O_다른_유저의_메이트_모집_게시물_삭제_불가능(): void
     {
         //Create a gym using the factory
         $gym = Gym::factory()->create();
@@ -263,7 +275,7 @@ class BoardTest extends TestCase
         $this->expectsDatabaseQueryCount(0);
     }
     
-    public function test_13_로그인_O_본인_소유의_메이트_모집_게시물_삭제_가능(): void
+    public function test_15_로그인_O_본인_소유의_메이트_모집_게시물_삭제_가능(): void
     {
         //Create a gym using the factory
         $gym = Gym::factory()->create();
