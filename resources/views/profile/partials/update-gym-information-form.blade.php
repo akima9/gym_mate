@@ -1,11 +1,11 @@
 <section>
     <header>
         <h2 class="text-lg font-medium text-gray-900">
-            {{ __('Gym Information') }}
+            {{ __('GYM') }}
         </h2>
 
         <p class="mt-1 text-sm text-gray-600">
-            {{ __("Update your account's gym information.") }}
+            {{ __("계정의 헬스장 정보를 업데이트하세요.") }}
         </p>
     </header>
 
@@ -18,17 +18,18 @@
         @method('patch')
 
         <div>
-            <x-input-label for="title" :value="__('Search GYM Name')" />
+            <x-input-label for="title" :value="__('GYM 검색')" />
             <x-text-input onkeyup="gymProfile.handleKeyPress()" id="title" name="title" type="text" class="mt-1 block w-full" :value="old('title', ($user->gym) ? $user->gym->title : '')" autofocus autocomplete="title" />
-            
-            <x-input-label for="gym_id" :value="__('Choose GYM Name')" class="mt-1" />
+        </div>
+        <div>
+            <x-input-label for="gym_id" :value="__('GYM 선택')" />
             <select name="gym_id" id="gym_id" class="border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm mt-1 block w-full">
             </select>
             <x-input-error class="mt-2" :messages="$errors->get('gym_id')" />
         </div>
 
         <div class="flex items-center gap-4">
-            <x-primary-button>{{ __('Save') }}</x-primary-button>
+            <x-primary-button>{{ __('수정') }}</x-primary-button>
 
             @if (session('status') === 'gym-updated')
                 <p
@@ -37,7 +38,7 @@
                     x-transition
                     x-init="setTimeout(() => show = false, 2000)"
                     class="text-sm text-gray-600"
-                >{{ __('Saved.') }}</p>
+                >{{ __('수정 되었습니다.') }}</p>
             @endif
         </div>
     </form>
