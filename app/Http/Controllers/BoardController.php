@@ -7,6 +7,7 @@ use App\Http\Requests\UpdateBoardRequest;
 use App\Models\Board;
 use App\Services\BoardService;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Request;
 use Illuminate\View\View;
 
 class BoardController extends Controller
@@ -21,9 +22,9 @@ class BoardController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index(): View
+    public function index(Request $request): View
     {
-        $boards = $this->boardService->getBoardsPerPage(10);
+        $boards = $this->boardService->getBoardsPerPage($request);
         return view('board.index', ['boards' => $boards]);
     }
 

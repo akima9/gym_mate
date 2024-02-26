@@ -10,7 +10,7 @@
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                 <div class="p-6 text-gray-900">
                     <div class="flex space-x-2 justify-end">
-                        <x-primary-anchor :href="route('boards.index')">목록</x-primary-anchor>
+                        <x-primary-anchor :href="route('boards.index', ['page' => request('page'), 'status' => request('status'), 'trainingDate' => request('trainingDate'), 'keyword' => request('keyword')])">목록</x-primary-anchor>
                         @can('update', $board)
                             <x-primary-anchor :href="route('boards.edit', ['board' => $board])">수정</x-primary-anchor>
                         @endcan

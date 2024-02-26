@@ -18,9 +18,9 @@ class BoardService
         return $this->boardRepository->findById($id);
     }
 
-    public function getBoardsPerPage($listCount)
+    public function getBoardsPerPage($request)
     {
-        $boards = $this->boardRepository->getBoardsPerPage($listCount);
+        $boards = $this->boardRepository->getBoardsPerPage($request);
         foreach ($boards as $board) {
             $board->trainingParts = json_decode($board->trainingParts);
         }

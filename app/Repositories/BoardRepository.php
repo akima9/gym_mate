@@ -11,9 +11,25 @@ class BoardRepository
         return Board::find($id);
     }
 
-    public function getBoardsPerPage($listCount)
+    public function getBoardsPerPage($request)
     {
-        return Board::orderBy('id', 'desc')->paginate($listCount);
+        $status = (empty($request->status)) ? '' : $request->status;
+        $trainingDate = (empty($request->trainingDate)) ? '' : $request->trainingDate;
+        $keyword = (empty($request->keyword)) ? '' : $request->keyword;
+
+        $query = Board::query();
+        if (!empty($status)) {
+            $query->where('status', $status);
+        }
+        if (!empty($trainingDate)) {
+            $query->where('trainingDate', $trainingDate);
+        }
+        if (!empty($keyword)) {
+            $query->where('title', 'like', '%' . $keyword . '%')
+                ->orWhere('content', 'like', '%' . $keyword . '%');
+        }
+
+        return $query->orderBy('id', 'desc')->paginate(1);
     }
 
     public function save($request)

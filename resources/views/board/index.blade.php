@@ -9,12 +9,23 @@
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                 <div class="p-6 text-gray-900">
+                    <div class="flex justify-center my-5 rounded">
+                        <form action="{{route('boards.index')}}" method="get">
+                            <select name="status" id="status" value="{{request('status')}}" class="border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm">
+                                <option value="running" @if (request('status') === 'running') selected @endif>모집중</option>
+                                <option value="done" @if (request('status') === 'done') selected @endif>모집마감</option>
+                            </select>
+                            <input type="date" name="trainingDate" id="trainingDate" value="{{request('trainingDate')}}" class="border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm">
+                            <input type="text" name="keyword" id="keyword" value="{{request('keyword')}}" class="border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm">
+                            <x-primary-button>{{ __('검색') }}</x-primary-button>
+                        </form>
+                    </div>
                     <div class="flex justify-end">
                         <x-secondary-button onclick="mateBoard.checkGym()">글쓰기</x-secondary-button>
                     </div>
                     @foreach ($boards as $board)
                         <div class="border border-inherit p-3 mt-5 hover:bg-slate-50 rounded">
-                            <a href="{{route('boards.show', ['board' => $board])}}">
+                            <a href="{{route('boards.show', ['board' => $board, 'page' => request('page'), 'status' => request('status'), 'trainingDate' => request('trainingDate'), 'keyword' => request('keyword')])}}">
                                 <p class="mt-1 text-sm text-gray-600">
                                     {{$board->created_at->diffForHumans()}}
                                 </p>
@@ -53,7 +64,7 @@
                         </div>
                     @endforeach
                     <div class="mt-5">
-                        {{$boards->links()}}
+                        {{$boards->withQueryString()->links()}}
                     </div>
                 </div>
             </div>
