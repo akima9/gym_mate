@@ -292,4 +292,42 @@ class BoardTest extends TestCase
         $response->assertRedirectToRoute('boards.index');
         $this->assertModelMissing($board);
     }
+
+    public function test_16_게시글_검색_가능(): void
+    {
+        //Create a gym using the factory
+        $gym01 = Gym::factory()->create(['title' => 'test01 gym']);
+        //Create a user using the factory
+        $user01 = User::factory()->create(['gym_id' => $gym01->id]);
+        //Create a board using the factory
+        $board01 = Board::factory()->create(['user_id' => $user01->id, 'gym_id' => $gym01->id, 'trainingDate' => '2024-02-27']);
+        //Create a gym using the factory
+        $gym02 = Gym::factory()->create(['title' => 'test02 gym']);
+        //Create a user using the factory
+        $user02 = User::factory()->create(['gym_id' => $gym02->id]);
+        //Create a board using the factory
+        $board02 = Board::factory()->create(['user_id' => $user02->id, 'gym_id' => $gym02->id, 'trainingDate' => '2024-02-27']);
+
+        //Act
+        $response = $this->get(route('boards.index', [
+            'status' => 'running',
+            'trainingDate' => '2024-02-27',
+            'keyword' => 'test01 gym',
+        ]));
+
+        $response02 = $this->get(route('boards.index', [
+            'status' => 'running',
+            'trainingDate' => '2024-02-27',
+            'keyword' => 'test',
+        ]));
+
+        //Assert
+        $response->assertStatus(200)
+            ->assertSee($board01->title)
+            ->assertDontSee($board02->title);
+        
+        $response02->assertStatus(200)
+            ->assertSee($board01->title)
+            ->assertSee($board02->title);
+    }
 }

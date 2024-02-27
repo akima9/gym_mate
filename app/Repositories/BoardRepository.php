@@ -34,7 +34,7 @@ class BoardRepository
             });
         }
 
-        $boards = $query->orderBy('id', 'desc')->paginate(1);
+        $boards = $query->orderBy('id', 'desc')->paginate(10);
 
         return $boards;
     }
