@@ -17,19 +17,26 @@ class BoardRepository
         $trainingDate = (empty($request->trainingDate)) ? '' : $request->trainingDate;
         $keyword = (empty($request->keyword)) ? '' : $request->keyword;
 
-        $query = Board::query();
+        $query = Board::join('gyms', 'boards.gym_id', '=', 'gyms.id')
+                        ->select('boards.*', 'gyms.title as gym_title');
+
         if (!empty($status)) {
-            $query->where('status', $status);
+            $query->where('boards.status', $status);
         }
         if (!empty($trainingDate)) {
-            $query->where('trainingDate', $trainingDate);
+            $query->where('boards.trainingDate', $trainingDate);
         }
         if (!empty($keyword)) {
-            $query->where('title', 'like', '%' . $keyword . '%')
-                ->orWhere('content', 'like', '%' . $keyword . '%');
+            $query->where(function($query) use ($keyword) {
+                $query->where('boards.title', 'like', '%' . $keyword . '%')
+                ->orWhere('boards.content', 'like', '%' . $keyword . '%')
+                ->orWhere('gyms.title', 'like', '%' . $keyword . '%');
+            });
         }
 
-        return $query->orderBy('id', 'desc')->paginate(1);
+        $boards = $query->orderBy('id', 'desc')->paginate(1);
+
+        return $boards;
     }
 
     public function save($request)
