@@ -27,8 +27,22 @@ class ChatRepository
 
     public function findByChatRoomId($chatRoomId)
     {
-        return Chat::where('chat_room_id', $chatRoomId)
+        // return Chat::where('chat_room_id', $chatRoomId)
+        //             ->with('sendUser', 'receiveUser')
+        //             ->paginate(2);
+        $totalCount = Chat::where('chat_room_id', $chatRoomId)
+            ->with('sendUser', 'receiveUser')
+            ->count();
+
+        $chats = Chat::where('chat_room_id', $chatRoomId)
                     ->with('sendUser', 'receiveUser')
+                    ->skip(0)
+                    ->take(30)
                     ->get();
+        return $chats;
+        //dd($totalCount); //26
+        // return Chat::where('chat_room_id', $chatRoomId)
+        //             ->with('sendUser', 'receiveUser')
+        //             ->get();
     }
 }
