@@ -45,4 +45,9 @@ class ChatService
     {
         return $this->chatRepository->findByChatRoomId($chatRoomId);
     }
+
+    public function getChats($chatRoomId, $page)
+    {
+        return $this->chatRepository->findByChatRoomIdAndPage($chatRoomId, $page);
+    }
 }

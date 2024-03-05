@@ -44,8 +44,17 @@
     
     @push('scripts')
         <script>
+            let messagesDiv = document.querySelector('#messages');
+            let page = 1;
+            messagesDiv.addEventListener('scroll',() => {
+                if (messagesDiv.scrollTop === 0) {
+                    chat.loadChat();
+                }
+            });
+            
             const chat = {
                 init: () => {
+                    chat.loadChat();
                     chat.scrollToBottom();
 
                     window.Pusher = Pusher;
@@ -166,6 +175,29 @@
                         chatDiv.appendChild(createAtP);
                         document.querySelector('#messages').appendChild(chatDiv);
                     });
+                },
+                loadChat: () => {
+                    //page는 전역 변수
+                    console.log('page', page);
+                    let url = "{{ route('chats.load') }}";
+                    let data = new URLSearchParams();
+                    data.append('page', page);
+                    data.append('chatRoomId', {{$chatRoom->id}});
+                    chat.getData(`${url}?${data}`);
+                    page++;
+                },
+                getData: (url) => {
+                    fetch(url)
+                    .then(response => {
+                        if (!response.ok) {
+                            throw new Error(response);
+                        }
+                        return response.json();
+                    })
+                    .then(data => {
+                        console.log(data);
+                    })
+                    .catch(error => console.error('Error:', error));
                 }
             };
 

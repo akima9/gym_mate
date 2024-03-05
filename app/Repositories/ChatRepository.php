@@ -27,22 +27,36 @@ class ChatRepository
 
     public function findByChatRoomId($chatRoomId)
     {
-        // return Chat::where('chat_room_id', $chatRoomId)
-        //             ->with('sendUser', 'receiveUser')
-        //             ->paginate(2);
         $totalCount = Chat::where('chat_room_id', $chatRoomId)
             ->with('sendUser', 'receiveUser')
             ->count();
 
         $chats = Chat::where('chat_room_id', $chatRoomId)
                     ->with('sendUser', 'receiveUser')
-                    ->skip(0)
-                    ->take(30)
+                    ->skip($totalCount - 10)
+                    ->take(10)
                     ->get();
         return $chats;
         //dd($totalCount); //26
         // return Chat::where('chat_room_id', $chatRoomId)
         //             ->with('sendUser', 'receiveUser')
         //             ->get();
+    }
+
+    public function findByChatRoomIdAndPage($chatRoomId, $page)
+    {
+        $countPerPage = 10;
+
+        $totalCount = Chat::where('chat_room_id', $chatRoomId)
+            ->with('sendUser', 'receiveUser')
+            ->count();
+
+        $chats = Chat::where('chat_room_id', $chatRoomId)
+                    ->with('sendUser', 'receiveUser')
+                    ->skip(($totalCount - $page * $countPerPage) >= 0 ? $totalCount - $page * $countPerPage : 0)
+                    ->take($countPerPage)
+                    ->get();
+
+        return $chats;
     }
 }

@@ -58,4 +58,14 @@ class ChatController extends Controller
         $chats = $this->chatService->findByChatRoomId($chatRoom->id);
         return view('chat.detail', compact('chats', 'chatPartnerId', 'chatRoom'));
     }
+
+    public function load(Request $request)
+    {
+        $page = $request->page;
+        $chatRoomId = $request->chatRoomId;
+        // var_dump($page);
+        // var_dump($chatRoomId);
+        $chats = $this->chatService->getChats($chatRoomId, $page);
+        return response()->json($chats);
+    }
 }
