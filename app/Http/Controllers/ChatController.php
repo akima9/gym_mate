@@ -56,6 +56,7 @@ class ChatController extends Controller
             $chatRoom = $this->chatRoomService->save($user->id, $chatPartnerId);
         }
         $chats = $this->chatService->findByChatRoomId($chatRoom->id);
+        session()->forget('first_chat_id');
         return view('chat.detail', compact('chats', 'chatPartnerId', 'chatRoom'));
     }
 
@@ -63,8 +64,6 @@ class ChatController extends Controller
     {
         $page = $request->page;
         $chatRoomId = $request->chatRoomId;
-        // var_dump($page);
-        // var_dump($chatRoomId);
         $chats = $this->chatService->getChats($chatRoomId, $page);
         return response()->json($chats);
     }

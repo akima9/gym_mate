@@ -51,11 +51,39 @@ class ChatRepository
             ->with('sendUser', 'receiveUser')
             ->count();
 
-        $chats = Chat::where('chat_room_id', $chatRoomId)
-                    ->with('sendUser', 'receiveUser')
-                    ->skip(($totalCount - $page * $countPerPage) >= 0 ? $totalCount - $page * $countPerPage : 0)
-                    ->take($countPerPage)
-                    ->get();
+        $currentFirstChatId = Chat::where('chat_room_id', $chatRoomId)
+                ->with('sendUser', 'receiveUser')
+                ->skip(($totalCount - $page * $countPerPage) >= 0 ? $totalCount - $page * $countPerPage : 0)
+                ->take(1)
+                ->value('id');
+
+        // dd($currentFirstChatId);
+        $firstChatId = session()->get('first_chat_id');
+
+        if ($currentFirstChatId === $firstChatId) return [];
+
+        session(['first_chat_id' => $currentFirstChatId]);
+
+        if ($firstChatId) {
+            $chats = Chat::where('chat_room_id', $chatRoomId)
+                        ->where('id', '>=', $currentFirstChatId)
+                        ->where('id', '<', $firstChatId)
+                        ->with('sendUser', 'receiveUser')
+                        ->take($countPerPage)
+                        ->get();
+        } else {
+            $chats = Chat::where('chat_room_id', $chatRoomId)
+                        ->where('id', '>=', $currentFirstChatId)
+                        ->with('sendUser', 'receiveUser')
+                        ->take($countPerPage)
+                        ->get();
+        }
+
+        // $chats = Chat::where('chat_room_id', $chatRoomId)
+        //             ->with('sendUser', 'receiveUser')
+        //             ->skip(($totalCount - $page * $countPerPage) >= 0 ? $totalCount - $page * $countPerPage : 0)
+        //             ->take($countPerPage)
+        //             ->get();
 
         return $chats;
     }

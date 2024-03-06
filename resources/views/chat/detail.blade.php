@@ -196,6 +196,17 @@
                     })
                     .then(data => {
                         console.log(data);
+                        data.forEach((chat) => {
+                            console.log('chat', chat);
+                            if (chat.receive_user_id == {{ auth()->user()->id }}) {//받는 사람과 로그인한 사람이 같은 경우
+                                console.log('send_user', chat.send_user.nickname);
+                                console.log('msg', chat.message);
+                                console.log('created_at', chat.created_at);
+                            } else {//받는 사람과 로그인한 사람이 다른 경우
+                                console.log('msg', chat.message);
+                                console.log('created_at', chat.created_at);
+                            }
+                        });
                     })
                     .catch(error => console.error('Error:', error));
                 }
