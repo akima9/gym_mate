@@ -40,6 +40,7 @@
     @push('pusher-cdn')
         <script src="https://js.pusher.com/8.2.0/pusher.min.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/laravel-echo@1.11.2/dist/echo.iife.js"></script>
+        <script src="https://cdn.jsdelivr.net/momentjs/2.29.1/moment.min.js"></script>
     @endpush
     
     @push('scripts')
@@ -146,40 +147,39 @@
                     .then(data => {})
                     .catch(error => console.error('Error:', error));
                 },
-                showChat: (chats, sendUser, receiveUser) => {
-                    chats.forEach((chat) => {
-                        let chatDiv = document.createElement('div');
-                        chatDiv.className = 'mb-3';
+                // showChat: (chats, sendUser, receiveUser) => {
+                //     chats.forEach((chat) => {
+                //         let chatDiv = document.createElement('div');
+                //         chatDiv.className = 'mb-3';
                         
-                        let nickNameP = document.createElement('p');
-                        nickNameP.className = 'text-sm text-gray-600';
-                        let nickName;
-                        if (chat.send_user_id == sendUser.id) {
-                            nickName = document.createTextNode(sendUser.nickname);
-                        } else {
-                            nickName = document.createTextNode(receiveUser.nickname);
-                        }
-                        nickNameP.appendChild(nickName);
+                //         let nickNameP = document.createElement('p');
+                //         nickNameP.className = 'text-sm text-gray-600';
+                //         let nickName;
+                //         if (chat.send_user_id == sendUser.id) {
+                //             nickName = document.createTextNode(sendUser.nickname);
+                //         } else {
+                //             nickName = document.createTextNode(receiveUser.nickname);
+                //         }
+                //         nickNameP.appendChild(nickName);
 
-                        let messageP = document.createElement('p');
-                        messageP.className = 'bg-slate-100 rounded p-2';
-                        let message = document.createTextNode(chat.message);
-                        messageP.appendChild(message);
+                //         let messageP = document.createElement('p');
+                //         messageP.className = 'bg-slate-100 rounded p-2';
+                //         let message = document.createTextNode(chat.message);
+                //         messageP.appendChild(message);
                         
-                        let createAtP = document.createElement('p');
-                        createAtP.className = 'text-sm text-gray-600';
-                        let createAt = document.createTextNode(moment(chat.created_at).fromNow());
-                        createAtP.appendChild(createAt);
+                //         let createAtP = document.createElement('p');
+                //         createAtP.className = 'text-sm text-gray-600';
+                //         let createAt = document.createTextNode(moment(chat.created_at).fromNow());
+                //         createAtP.appendChild(createAt);
                         
-                        chatDiv.appendChild(nickNameP);
-                        chatDiv.appendChild(messageP);
-                        chatDiv.appendChild(createAtP);
-                        document.querySelector('#messages').appendChild(chatDiv);
-                    });
-                },
+                //         chatDiv.appendChild(nickNameP);
+                //         chatDiv.appendChild(messageP);
+                //         chatDiv.appendChild(createAtP);
+                //         document.querySelector('#messages').appendChild(chatDiv);
+                //     });
+                // },
                 loadChat: () => {
                     //page는 전역 변수
-                    // console.log('page', page);
                     let url = "{{ route('chats.load') }}";
                     let data = new URLSearchParams();
                     data.append('page', page);
@@ -196,8 +196,6 @@
                         return response.json();
                     })
                     .then(data => {
-                        // console.log('prevHeight', prevHeight);
-                        // console.log(data);
                         let chatGroupDiv = document.createElement('div'); 
                         data.forEach((chat) => {
                             let chatDiv = document.createElement('div');
@@ -233,7 +231,7 @@
                             }
                             
                             let message = document.createTextNode(chat.message);
-                            let createdAt = document.createTextNode(chat.created_at);
+                            let createdAt = document.createTextNode(moment(chat.created_at).fromNow());
                             
                             messageP.appendChild(message);
                             createdAtP.appendChild(createdAt);
