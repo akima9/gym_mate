@@ -11,7 +11,7 @@
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                 <div id="messages" class="p-6 text-gray-900 h-96 overflow-y-auto">
-                    @foreach ($chats as $chat)
+                    {{-- @foreach ($chats as $chat)
                         @if ($chat->receiveUser->id === auth()->user()->id)
                             <div class="mb-5">
                                 <p class="text-sm text-gray-600">{{ $chat->sendUser->nickname }}</p>
@@ -24,7 +24,7 @@
                                 <p class="text-sm text-gray-600 w-fit ml-auto">{{ $chat->created_at->diffForHumans() }}</p>
                             </div>
                         @endif
-                    @endforeach
+                    @endforeach --}}
                 </div>
                 <div class="p-6 text-gray-900 flex">
                     <div class="flex-1">
@@ -51,6 +51,7 @@
                     chat.loadChat();
                 }
             });
+            let prevHeight = 0;
             
             const chat = {
                 init: () => {
@@ -178,7 +179,7 @@
                 },
                 loadChat: () => {
                     //page는 전역 변수
-                    console.log('page', page);
+                    // console.log('page', page);
                     let url = "{{ route('chats.load') }}";
                     let data = new URLSearchParams();
                     data.append('page', page);
@@ -195,18 +196,59 @@
                         return response.json();
                     })
                     .then(data => {
-                        console.log(data);
+                        // console.log('prevHeight', prevHeight);
+                        // console.log(data);
+                        let chatGroupDiv = document.createElement('div'); 
                         data.forEach((chat) => {
-                            console.log('chat', chat);
+                            let chatDiv = document.createElement('div');
+                            chatDiv.className = 'mb-3';
+
+                            let messageP;
+                            let createdAtP;
+                            
                             if (chat.receive_user_id == {{ auth()->user()->id }}) {//받는 사람과 로그인한 사람이 같은 경우
-                                console.log('send_user', chat.send_user.nickname);
-                                console.log('msg', chat.message);
-                                console.log('created_at', chat.created_at);
+                                let nickNameP = document.createElement('p');
+                                nickNameP.className = 'text-sm text-gray-600';
+                                
+                                let nickName = document.createTextNode(chat.send_user.nickname);
+
+                                messageP = document.createElement('p');
+                                messageP.className = 'bg-slate-100 rounded py-2 px-3';
+                                messageP.style.width = 'fit-content';
+                                messageP.style.maxWidth = '40%';
+
+                                createdAtP = document.createElement('p');
+                                createdAtP.className = 'text-sm text-gray-600';
+                                
+                                nickNameP.appendChild(nickName);
+                                chatDiv.appendChild(nickNameP);
                             } else {//받는 사람과 로그인한 사람이 다른 경우
-                                console.log('msg', chat.message);
-                                console.log('created_at', chat.created_at);
+                                messageP = document.createElement('p');
+                                messageP.className = 'bg-slate-100 rounded py-2 px-3 ml-auto';
+                                messageP.style.width = 'fit-content';
+                                messageP.style.maxWidth = '40%';
+
+                                createdAtP = document.createElement('p');
+                                createdAtP.className = 'text-sm text-gray-600 w-fit ml-auto';
                             }
+                            
+                            let message = document.createTextNode(chat.message);
+                            let createdAt = document.createTextNode(chat.created_at);
+                            
+                            messageP.appendChild(message);
+                            createdAtP.appendChild(createdAt);
+                            
+                            chatDiv.appendChild(messageP);
+                            chatDiv.appendChild(createdAtP);
+
+                            chatGroupDiv.appendChild(chatDiv);
                         });
+                        
+                        let messagesDiv = document.querySelector('#messages');
+                        prevHeight = messagesDiv.scrollHeight;
+                        messagesDiv.insertBefore(chatGroupDiv, messagesDiv.firstChild);
+                        currentHeight = messagesDiv.scrollHeight;
+                        messagesDiv.scrollTo(0, currentHeight - prevHeight);
                     })
                     .catch(error => console.error('Error:', error));
                 }
