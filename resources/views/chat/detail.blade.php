@@ -11,20 +11,6 @@
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                 <div id="messages" class="p-6 text-gray-900 h-96 overflow-y-auto">
-                    {{-- @foreach ($chats as $chat)
-                        @if ($chat->receiveUser->id === auth()->user()->id)
-                            <div class="mb-5">
-                                <p class="text-sm text-gray-600">{{ $chat->sendUser->nickname }}</p>
-                                <p class="bg-slate-100 rounded py-2 px-3" style="width:fit-content;max-width:40%">{{ $chat->message }}</p>
-                                <p class="text-sm text-gray-600">{{ $chat->created_at->diffForHumans() }}</p>
-                            </div>
-                        @else
-                            <div class="mb-5">
-                                <p class="bg-slate-100 rounded py-2 px-3 ml-auto" style="width:fit-content;max-width:40%">{{ $chat->message }}</p>
-                                <p class="text-sm text-gray-600 w-fit ml-auto">{{ $chat->created_at->diffForHumans() }}</p>
-                            </div>
-                        @endif
-                    @endforeach --}}
                 </div>
                 <div class="p-6 text-gray-900 flex">
                     <div class="flex-1">
@@ -147,37 +133,6 @@
                     .then(data => {})
                     .catch(error => console.error('Error:', error));
                 },
-                // showChat: (chats, sendUser, receiveUser) => {
-                //     chats.forEach((chat) => {
-                //         let chatDiv = document.createElement('div');
-                //         chatDiv.className = 'mb-3';
-                        
-                //         let nickNameP = document.createElement('p');
-                //         nickNameP.className = 'text-sm text-gray-600';
-                //         let nickName;
-                //         if (chat.send_user_id == sendUser.id) {
-                //             nickName = document.createTextNode(sendUser.nickname);
-                //         } else {
-                //             nickName = document.createTextNode(receiveUser.nickname);
-                //         }
-                //         nickNameP.appendChild(nickName);
-
-                //         let messageP = document.createElement('p');
-                //         messageP.className = 'bg-slate-100 rounded p-2';
-                //         let message = document.createTextNode(chat.message);
-                //         messageP.appendChild(message);
-                        
-                //         let createAtP = document.createElement('p');
-                //         createAtP.className = 'text-sm text-gray-600';
-                //         let createAt = document.createTextNode(moment(chat.created_at).fromNow());
-                //         createAtP.appendChild(createAt);
-                        
-                //         chatDiv.appendChild(nickNameP);
-                //         chatDiv.appendChild(messageP);
-                //         chatDiv.appendChild(createAtP);
-                //         document.querySelector('#messages').appendChild(chatDiv);
-                //     });
-                // },
                 loadChat: () => {
                     //page는 전역 변수
                     let url = "{{ route('chats.load') }}";
