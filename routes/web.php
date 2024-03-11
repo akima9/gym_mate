@@ -33,6 +33,7 @@ Route::middleware('auth')->group(function () {
     Route::patch('/profile/gym', [ProfileController::class, 'updateForGym'])->name('profile.updateForGym');
 
     Route::post('/gyms/find', [GymController::class, 'find'])->name('gyms.find');
+    Route::post('/gyms/store', [GymController::class, 'store'])->name('gyms.store');
 });
 
 Route::resource('boards', BoardController::class);

@@ -51,6 +51,34 @@
         </div>
     </form>
 
+    <form method="post" action="{{ route('gyms.store') }}" class="mt-6 space-y-6">
+        @csrf
+        <div>
+            <x-input-label for="selfTitle" :value="__('GYM 이름 직접입력')" />
+            <x-text-input id="selfTitle" name="title" type="text" class="mt-1 block w-full" autofocus autocomplete="title" />
+            <x-input-error class="mt-2" :messages="$errors->get('title')" />
+        </div>
+        <div>
+            <x-input-label for="selfAddress" :value="__('GYM 주소 직접입력')" />
+            <x-text-input id="selfAddress" name="address" type="text" class="mt-1 block w-full" autofocus autocomplete="title" />
+            <x-input-error class="mt-2" :messages="$errors->get('address')" />
+        </div>
+
+        <div class="flex items-center gap-4">
+            <x-primary-button>{{ __('직접등록') }}</x-primary-button>
+
+            @if (session('status') === 'gym-added')
+                <p
+                    x-data="{ show: true }"
+                    x-show="show"
+                    x-transition
+                    x-init="setTimeout(() => show = false, 2000)"
+                    class="text-sm text-gray-600"
+                >{{ __('등록 되었습니다.') }}</p>
+            @endif
+        </div>
+    </form>
+
     @push('scripts')
         <script>
             const gymProfile = {
