@@ -36,7 +36,7 @@ class GymController extends Controller
      */
     public function store(StoreGymRequest $request)
     {
-        dd($request);
+
     }
 
     /**
