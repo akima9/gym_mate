@@ -73,6 +73,9 @@
 
     @push('scripts')
         <script>
+            @if(session('status') === 'user-registered')
+                alert('인증 메일이 발송 되었습니다.');
+            @endif
             const mateBoard = {
                 checkGym: () => {
                     @auth

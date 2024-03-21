@@ -24,14 +24,10 @@ class StoreBoardRequest extends FormRequest
     {
         return [
             'title' => ['required'],
-            'trainingDate' => ['required'],
-            'trainingStartTime' => ['required'],
-            'trainingEndTime' => ['required'],
+            'trainingDate' => ['required', 'date'],
+            'trainingStartTime' => ['required', 'date_format:H:i'],
+            'trainingEndTime' => ['required', 'date_format:H:i', 'after:trainingStartTime'],
             'trainingParts' => ['required'],
         ];
-        // return [
-        //     'name' => ['required', 'string', 'max:255'],
-        //     'email' => ['required', 'string', 'lowercase', 'email', 'max:255', Rule::unique(User::class)->ignore($this->user()->id)],
-        // ];
     }
 }
