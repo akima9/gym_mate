@@ -45,6 +45,10 @@ class BoardController extends Controller
      */
     public function store(StoreBoardRequest $request): RedirectResponse
     {
+        /**
+         * TO-DO
+         * 운동시간 유효성 검사 추가
+         */
         $request->validated();
         $board = $this->boardService->save($request);
         if (empty($board)) {
