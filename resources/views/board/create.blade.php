@@ -13,7 +13,7 @@
                         @csrf
                         <div class="mb-4">
                             <x-input-label for="title" :value="__('제목')" />
-                            <x-text-input :value="old('title')" id="title" name="title" type="text" class="mt-1 block w-full" required autofocus autocomplete="title" />
+                            <x-text-input :value="old('title')" id="title" name="title" type="text" class="mt-1 block w-full" autofocus autocomplete="title" />
                             <x-input-error class="mt-2" :messages="$errors->get('title')" />
                         </div>
                         <div class="mb-4">
