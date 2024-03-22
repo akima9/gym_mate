@@ -2,6 +2,7 @@
 
 namespace App\Repositories;
 
+use App\Dtos\BoardDto;
 use App\Models\Board;
 
 class BoardRepository
@@ -39,31 +40,56 @@ class BoardRepository
         return $boards;
     }
 
-    public function save($request)
+    public function save(BoardDto $dto)
     {
-        if (empty($request['content'])) {
+        if (empty($dto->getContent())) {
             return Board::create([
-                'title' => $request['title'],
-                'trainingDate' => $request['trainingDate'],
-                'trainingStartTime' => $request['trainingStartTime'],
-                'trainingEndTime' => $request['trainingEndTime'],
-                'trainingParts' => $request['trainingParts'],
-                'user_id' => $request->user()->id,
-                'gym_id' => $request->user()->gym_id,
-            ]);
-        } else {
-            return Board::create([
-                'title' => $request['title'],
-                'trainingDate' => $request['trainingDate'],
-                'trainingStartTime' => $request['trainingStartTime'],
-                'trainingEndTime' => $request['trainingEndTime'],
-                'trainingParts' => $request['trainingParts'],
-                'content' => $request['content'],
-                'user_id' => $request->user()->id,
-                'gym_id' => $request->user()->gym_id,
+                'title' => $dto->getTitle(),
+                'trainingDate' => $dto->getTrainingDate(),
+                'trainingStartTime' => $dto->getTrainingStartTime(),
+                'trainingEndTime' => $dto->getTrainingEndTime(),
+                'trainingParts' => $dto->getTrainingParts(),
+                'user_id' => $dto->getUserId(),
+                'gym_id' => $dto->getGymId(),
             ]);
         }
+
+        return Board::create([
+            'title' => $dto->getTitle(),
+            'trainingDate' => $dto->getTrainingDate(),
+            'trainingStartTime' => $dto->getTrainingStartTime(),
+            'trainingEndTime' => $dto->getTrainingEndTime(),
+            'trainingParts' => $dto->getTrainingParts(),
+            'content' => $dto->getContent(),
+            'user_id' => $dto->getUserId(),
+            'gym_id' => $dto->getGymId(),
+        ]);
     }
+    // public function save($request)
+    // {
+    //     if (empty($request['content'])) {
+    //         return Board::create([
+    //             'title' => $request['title'],
+    //             'trainingDate' => $request['trainingDate'],
+    //             'trainingStartTime' => $request['trainingStartTime'],
+    //             'trainingEndTime' => $request['trainingEndTime'],
+    //             'trainingParts' => $request['trainingParts'],
+    //             'user_id' => $request->user()->id,
+    //             'gym_id' => $request->user()->gym_id,
+    //         ]);
+    //     } else {
+    //         return Board::create([
+    //             'title' => $request['title'],
+    //             'trainingDate' => $request['trainingDate'],
+    //             'trainingStartTime' => $request['trainingStartTime'],
+    //             'trainingEndTime' => $request['trainingEndTime'],
+    //             'trainingParts' => $request['trainingParts'],
+    //             'content' => $request['content'],
+    //             'user_id' => $request->user()->id,
+    //             'gym_id' => $request->user()->gym_id,
+    //         ]);
+    //     }
+    // }
 
     public function update($board, $request)
     {

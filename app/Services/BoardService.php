@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Dtos\BoardDto;
 use App\Repositories\BoardRepository;
 
 class BoardService
@@ -32,8 +33,9 @@ class BoardService
         if (empty($request->user()->gym_id)) {
             return null;
         }
-        $request['trainingParts'] = json_encode($request['trainingParts'], JSON_UNESCAPED_UNICODE);
-        return $this->boardRepository->save($request);
+        
+        $boardDto = new BoardDto($request);
+        return $this->boardRepository->save($boardDto);
     }
 
     public function update($board, $request)
