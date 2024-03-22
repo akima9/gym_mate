@@ -84,6 +84,7 @@ class BoardController extends Controller
         $request->validated();
         
         $boardDto = new BoardDto($request);
+        dd($boardDto);
         $updatedCount = $this->boardService->update($board, $boardDto);
         if ($updatedCount !== 1) return back()->withInput()->with('status', 'board-update-failed');
 

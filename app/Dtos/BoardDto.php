@@ -2,39 +2,28 @@
 
 namespace App\Dtos;
 
-class BoardDto
+use App\Dtos\BaseDto;
+
+class BoardDto extends BaseDto
 {
-    private $id;
-    private $title;
-    private $trainingDate;
-    private $trainingStartTime;
-    private $trainingEndTime;
-    private $trainingParts;
-    private $content;
-    private $status;
-    private $user_id;
-    private $gym_id;
-    private $created_at;
-    private $updated_at;
+    protected $id;
+    protected $title;
+    protected $trainingDate;
+    protected $trainingStartTime;
+    protected $trainingEndTime;
+    protected $trainingParts;
+    protected $content;
+    protected $status;
+    protected $user_id;
+    protected $gym_id;
+    protected $created_at;
+    protected $updated_at;
 
     public function __construct($request)
     {
         $this->bindToDto($request);
-    }
-
-    
-
-    public function bindToDto($request)
-    {
-        foreach ($request->all() as $name => $value) {
-            if (is_array($value)) {
-                $this->{$name} = json_encode($value, JSON_UNESCAPED_UNICODE);
-            } else {
-                $this->{$name} = $value;
-            }
-        }
-        $this->user_id = $request->user()->id;
-        $this->gym_id = $request->user()->gym_id;
+        $this->setUserId($request);
+        $this->setGymId($request);
     }
 
     /**
@@ -109,12 +98,22 @@ class BoardDto
         return $this->user_id;
     }
 
+    public function setUserId($request)
+    {
+        $this->user_id = $request->user()->id;
+    }
+
     /**
      * Get the value of gym_id
      */
     public function getGymId()
     {
         return $this->gym_id;
+    }
+
+    public function setGymId($request)
+    {
+        $this->gym_id = $request->user()->gym_id;
     }
 
     /**
