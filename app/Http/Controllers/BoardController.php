@@ -25,13 +25,13 @@ class BoardController extends Controller
     public function index(Request $request): View
     {
         $boards = $this->boardService->getBoardsPerPage($request);
-        return view('board.index', ['boards' => $boards]);
+        return view('board.index', compact('boards'));
     }
 
     /**
      * Show the form for creating a new resource.
      */
-    public function create()
+    public function create(): View
     {
         $user = auth()->user();
         if (empty($user->gym_id)) {
@@ -60,7 +60,7 @@ class BoardController extends Controller
     public function show(Board $board): View
     {
         $board->trainingParts = json_decode($board->trainingParts);
-        return view('board.show', ['board' => $board]);
+        return view('board.show', compact('board'));
     }
 
     /**
@@ -70,7 +70,7 @@ class BoardController extends Controller
     {
         $this->authorize('update', $board);
         $board->trainingParts = json_decode($board->trainingParts);
-        return view('board.edit', ['board' => $board]);
+        return view('board.edit', compact('board'));
     }
 
     /**
@@ -80,9 +80,11 @@ class BoardController extends Controller
     {
         $this->authorize('update', $board);
         $request->validated();
-        $this->boardService->update($board, $request);
+        $updatedCount = $this->boardService->update($board, $request);
+        if ($updatedCount !== 1) return back()->withInput()->with('status', 'board-update-failed');
+
         $updatedBoard = $this->boardService->findById($board->id);
-        $board->trainingParts = json_decode($board->trainingParts);
+
         return redirect()->route('boards.show', ['board' => $updatedBoard]);
     }
 

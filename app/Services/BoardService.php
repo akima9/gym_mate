@@ -3,7 +3,11 @@
 namespace App\Services;
 
 use App\Dtos\BoardDto;
+use App\Http\Requests\StoreBoardRequest;
+use App\Http\Requests\UpdateBoardRequest;
+use App\Models\Board;
 use App\Repositories\BoardRepository;
+use Illuminate\Http\Request;
 
 class BoardService
 {
@@ -14,12 +18,12 @@ class BoardService
         $this->boardRepository = $boardRepository;
     }
 
-    public function findById($id)
+    public function findById(int $id): Board
     {
         return $this->boardRepository->findById($id);
     }
 
-    public function getBoardsPerPage($request)
+    public function getBoardsPerPage(Request $request): Board
     {
         $boards = $this->boardRepository->getBoardsPerPage($request);
         foreach ($boards as $board) {
@@ -28,7 +32,7 @@ class BoardService
         return $boards;
     }
 
-    public function save($request)
+    public function save(StoreBoardRequest $request): Board
     {
         if (empty($request->user()->gym_id)) {
             return null;
@@ -38,14 +42,16 @@ class BoardService
         return $this->boardRepository->save($boardDto);
     }
 
-    public function update($board, $request)
+    public function update(Board $board, UpdateBoardRequest $request): int
     {
-        $request['trainingParts'] = json_encode($request['trainingParts'], JSON_UNESCAPED_UNICODE);
-        return $this->boardRepository->update($board, $request);
+        $boardDto = new BoardDto($request);
+        return $this->boardRepository->update($board, $boardDto);
+        // $request['trainingParts'] = json_encode($request['trainingParts'], JSON_UNESCAPED_UNICODE);
+        // return $this->boardRepository->update($board, $request);
     }
 
-    public function delete($id)
+    public function delete(int $id): void
     {
-        return $this->boardRepository->delete($id);
+        $this->boardRepository->delete($id);
     }
 }

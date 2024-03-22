@@ -4,15 +4,16 @@ namespace App\Repositories;
 
 use App\Dtos\BoardDto;
 use App\Models\Board;
+use Illuminate\Http\Request;
 
 class BoardRepository
 {
-    public function findById($id)
+    public function findById(int $id): Board
     {
         return Board::find($id);
     }
 
-    public function getBoardsPerPage($request)
+    public function getBoardsPerPage(Request $request): Board
     {
         $status = (empty($request->status)) ? '' : $request->status;
         $trainingDate = (empty($request->trainingDate)) ? '' : $request->trainingDate;
@@ -40,7 +41,7 @@ class BoardRepository
         return $boards;
     }
 
-    public function save(BoardDto $dto)
+    public function save(BoardDto $dto): Board
     {
         if (empty($dto->getContent())) {
             return Board::create([
@@ -65,59 +66,34 @@ class BoardRepository
             'gym_id' => $dto->getGymId(),
         ]);
     }
-    // public function save($request)
-    // {
-    //     if (empty($request['content'])) {
-    //         return Board::create([
-    //             'title' => $request['title'],
-    //             'trainingDate' => $request['trainingDate'],
-    //             'trainingStartTime' => $request['trainingStartTime'],
-    //             'trainingEndTime' => $request['trainingEndTime'],
-    //             'trainingParts' => $request['trainingParts'],
-    //             'user_id' => $request->user()->id,
-    //             'gym_id' => $request->user()->gym_id,
-    //         ]);
-    //     } else {
-    //         return Board::create([
-    //             'title' => $request['title'],
-    //             'trainingDate' => $request['trainingDate'],
-    //             'trainingStartTime' => $request['trainingStartTime'],
-    //             'trainingEndTime' => $request['trainingEndTime'],
-    //             'trainingParts' => $request['trainingParts'],
-    //             'content' => $request['content'],
-    //             'user_id' => $request->user()->id,
-    //             'gym_id' => $request->user()->gym_id,
-    //         ]);
-    //     }
-    // }
 
-    public function update($board, $request)
+    public function update(Board $board, BoardDto $dto): int
     {
-        if (empty($request['content'])) {
+        if (empty($dto->getContent())) {
             return Board::where('id', $board->id)
-                    ->update([
-                        'title' => $request['title'],
-                        'trainingDate' => $request['trainingDate'],
-                        'trainingStartTime' => $request['trainingStartTime'],
-                        'trainingEndTime' => $request['trainingEndTime'],
-                        'trainingParts' => $request['trainingParts'],
-                        'status' => $request['status'],
-                    ]);
-        } else {
-            return Board::where('id', $board->id)
-                    ->update([
-                        'title' => $request['title'],
-                        'trainingDate' => $request['trainingDate'],
-                        'trainingStartTime' => $request['trainingStartTime'],
-                        'trainingEndTime' => $request['trainingEndTime'],
-                        'trainingParts' => $request['trainingParts'],
-                        'status' => $request['status'],
-                        'content' => $request['content'],
-                    ]);
+                        ->update([
+                            'title' => $dto->getTitle(),
+                            'trainingDate' => $dto->getTrainingDate(),
+                            'trainingStartTime' => $dto->getTrainingStartTime(),
+                            'trainingEndTime' => $dto->getTrainingEndTime(),
+                            'trainingParts' => $dto->getTrainingParts(),
+                            'status' => $dto->getStatus(),
+                        ]);
         }
+
+        return Board::where('id', $board->id)
+                    ->update([
+                        'title' => $dto->getTitle(),
+                        'trainingDate' => $dto->getTrainingDate(),
+                        'trainingStartTime' => $dto->getTrainingStartTime(),
+                        'trainingEndTime' => $dto->getTrainingEndTime(),
+                        'trainingParts' => $dto->getTrainingParts(),
+                        'status' => $dto->getStatus(),
+                        'content' => $dto->getContent(),
+                    ]);
     }
 
-    public function delete($id)
+    public function delete(int $id): void
     {
         Board::destroy($id);
     }

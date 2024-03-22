@@ -68,6 +68,9 @@
 
     @push('scripts')
         <script>
+            @if(session('status') === 'board-update-failed')
+                alert('게시글 수정에 실패 하였습니다.');
+            @endif
             const editBoard = {
                 loadTrainingParts: () => {
                     let trainingParts = @json($board->trainingParts);
