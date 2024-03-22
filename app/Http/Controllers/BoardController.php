@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Dtos\BoardDto;
 use App\Http\Requests\StoreBoardRequest;
 use App\Http\Requests\UpdateBoardRequest;
 use App\Models\Board;
@@ -46,7 +47,8 @@ class BoardController extends Controller
     public function store(StoreBoardRequest $request): RedirectResponse
     {
         $request->validated();
-        $board = $this->boardService->save($request);
+        $boardDto = new BoardDto($request);
+        $board = $this->boardService->save($boardDto);
 
         if (empty($board)) {
             return redirect()->route('profile.edit');
@@ -80,7 +82,9 @@ class BoardController extends Controller
     {
         $this->authorize('update', $board);
         $request->validated();
-        $updatedCount = $this->boardService->update($board, $request);
+        
+        $boardDto = new BoardDto($request);
+        $updatedCount = $this->boardService->update($board, $boardDto);
         if ($updatedCount !== 1) return back()->withInput()->with('status', 'board-update-failed');
 
         $updatedBoard = $this->boardService->findById($board->id);

@@ -2,7 +2,11 @@
 
 namespace App\Services;
 
+use App\Models\Chat;
+use App\Models\User;
 use App\Repositories\ChatRepository;
+use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Support\Collection as SupportCollection;
 
 class ChatService
 {
@@ -13,19 +17,19 @@ class ChatService
         $this->chatRepository = $chatRepository;
     }
 
-    public function findChats($id)
+    public function findChats(int $id): Collection
     {
         return $this->chatRepository->findChats($id);
     }
 
-    public function findChatPartners($chats, $user)
+    public function findChatPartners(Collection $chats, User $user): SupportCollection
     {
         return $chats->flatMap(function ($chat) use ($user) {
             return ($chat->send_user_id === $user->id) ? [$chat->receiveUser] : [$chat->sendUser];
         })->unique('id');
     }
 
-    public function findLastMessages($chats, $chatPartners)
+    public function findLastMessages(Collection $chats, SupportCollection $chatPartners): array
     {
         $latestMessages = [];
         foreach ($chatPartners as $partner) {

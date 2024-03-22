@@ -3,10 +3,11 @@
 namespace App\Repositories;
 
 use App\Models\Chat;
+use Illuminate\Database\Eloquent\Collection;
 
 class ChatRepository
 {
-    public function findChats($id)
+    public function findChats(int $id): Collection
     {
         return Chat::where('send_user_id', $id)
                     ->orWhere('receive_user_id', $id)

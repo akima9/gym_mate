@@ -5,6 +5,7 @@ namespace App\Repositories;
 use App\Dtos\BoardDto;
 use App\Models\Board;
 use Illuminate\Http\Request;
+use Illuminate\Pagination\LengthAwarePaginator;
 
 class BoardRepository
 {
@@ -13,7 +14,7 @@ class BoardRepository
         return Board::find($id);
     }
 
-    public function getBoardsPerPage(Request $request): Board
+    public function getBoardsPerPage(Request $request): LengthAwarePaginator
     {
         $status = (empty($request->status)) ? '' : $request->status;
         $trainingDate = (empty($request->trainingDate)) ? '' : $request->trainingDate;
