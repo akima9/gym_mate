@@ -39,9 +39,23 @@
                 </a>
             @endif
 
+            <x-secondary-button class="ms-3" onclick="login.register()">
+                {{ __('회원가입') }}
+            </x-secondary-button>
+
             <x-primary-button class="ms-3">
                 {{ __('로그인') }}
             </x-primary-button>
         </div>
     </form>
+
+    @push('scripts')
+        <script>
+            const login = {
+                register: () => {
+                    self.location = "{{route('register')}}";
+                }
+            }
+        </script>
+    @endpush
 </x-guest-layout>
