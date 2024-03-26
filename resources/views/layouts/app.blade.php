@@ -4,6 +4,16 @@
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <meta name="csrf-token" content="{{ csrf_token() }}">
+        {{-- Description --}}
+        <meta name="description" content="{{ config('app.description', 'Laravel') }}">
+        {{-- Og --}}
+        <meta property="og:title" content="{{ config('app.name', 'Laravel') }}">
+        <meta property="og:url" content="{{ config('app.url', 'Laravel') }}">
+        <meta property="og:description" content="{{ config('app.description', 'Laravel') }}">
+        {{-- TO-DO: 대표 이미지 삽입 --}}
+        <meta property="og:image" content="">
+        {{-- Robots --}}
+        <meta name="robots" content="index,nofollow">
 
         <title>{{ config('app.name', 'Laravel') }}</title>
 

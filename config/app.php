@@ -186,4 +186,8 @@ return [
         // 'Example' => App\Facades\Example::class,
     ])->toArray(),
 
+    /**
+     * Customs
+     */
+    'description' => env('APP_DESCRIPTION', 'Laravel'),
 ];
