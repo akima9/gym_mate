@@ -61,4 +61,11 @@
             @endif
         </div>
     </form>
+    @push('scripts')
+        <script>
+            @if (session('status') === 'profile-updated')
+                alert('수정 되었습니다.');
+            @endif
+        </script>
+    @endpush
 </section>

@@ -45,4 +45,11 @@
             @endif
         </div>
     </form>
+    @push('scripts')
+        <script>
+            @if (session('status') === 'password-updated')
+                alert('수정 되었습니다.');
+            @endif
+        </script>
+    @endpush
 </section>

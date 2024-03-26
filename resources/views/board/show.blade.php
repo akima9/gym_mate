@@ -15,7 +15,7 @@
                             <x-primary-anchor :href="route('boards.edit', ['board' => $board])">수정</x-primary-anchor>
                         @endcan
                         @can('delete', $board)
-                            <form action="{{route('boards.destroy', ['board' => $board])}}" method="POST">
+                            <form action="{{route('boards.destroy', ['board' => $board])}}" method="POST" onsubmit="return boardEdit.validate()">
                                 @csrf
                                 @method('DELETE')
                                 <x-primary-button>{{ __('삭제') }}</x-primary-button>
@@ -76,4 +76,17 @@
             </div>
         </div>
     </div>
+
+    @push('scripts')
+        <script>
+            const boardEdit = {
+                validate: () => {
+                    if (confirm('삭제 하시겠습니까?')) {
+                        return true;
+                    }
+                    return false;
+                }
+            }
+        </script>
+    @endpush
 </x-app-layout>

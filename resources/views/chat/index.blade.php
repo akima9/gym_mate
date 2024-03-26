@@ -9,8 +9,9 @@
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                 <div class="p-6 text-gray-900">
-                    @if (!$chatPartners)
+                    @if ($chatPartners->isEmpty())
                         <p>채팅 기록이 없습니다.</p>
+                        <p>같은 GYM을 이용하고 동일한 성별을 가진 사용자의 게시물을 통해 1:1 채팅이 가능합니다.</p>
                     @endif
                     @foreach ($chatPartners as $chatPartner)
                         <a onclick="goToChat({{$chatPartner->id}})" class="hover:cursor-pointer m-1">

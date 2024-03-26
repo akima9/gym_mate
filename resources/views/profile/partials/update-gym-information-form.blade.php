@@ -53,6 +53,14 @@
 
     @push('scripts')
         <script>
+            @if(session('status') === 'gym-updated')
+                alert('수정 되었습니다.');
+            @endif
+            @if(session('from') === 'board-create')
+                alert('GYM을 설정 해주세요.');
+                let gymTitleInput = document.querySelector('#title');
+                gymTitleInput.focus();
+            @endif
             const gymProfile = {
                 handleKeyPress: () => {
                     let title = document.querySelector('#title').value;
