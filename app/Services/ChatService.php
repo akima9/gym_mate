@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use App\Models\Chat;
+use App\Models\ChatRoom;
 use App\Models\User;
 use App\Repositories\ChatRepository;
 use Illuminate\Database\Eloquent\Collection;
@@ -40,17 +41,17 @@ class ChatService
         return $latestMessages;
     }
 
-    public function save($chatRoom, $request)
+    public function save(ChatRoom $chatRoom, $request): Chat
     {
         return $this->chatRepository->save($chatRoom, $request);
     }
 
-    public function findByChatRoomId($chatRoomId)
+    public function findByChatRoomId(int $chatRoomId): Collection
     {
         return $this->chatRepository->findByChatRoomId($chatRoomId);
     }
 
-    public function getChats($chatRoomId, $page)
+    public function getChats(int $chatRoomId, int $page): Collection
     {
         
         return $this->chatRepository->findByChatRoomIdAndPage($chatRoomId, $page);

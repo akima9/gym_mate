@@ -6,14 +6,14 @@ use App\Models\ChatRoom;
 
 class ChatRoomRepository
 {
-    public function findChatRoom($sendUserId, $receivedUserId)
+    public function findChatRoom(int $sendUserId, int $receivedUserId): ?ChatRoom
     {
         return ChatRoom::whereIn('admin_user_id', [$sendUserId, $receivedUserId])
                         ->whereIn('member_user_id', [$sendUserId, $receivedUserId])
                         ->first();
     }
 
-    public function save($adminUserId, $memberUserId)
+    public function save(int $adminUserId, int $memberUserId): ChatRoom
     {
         return ChatRoom::create([
             'admin_user_id' => $adminUserId,

@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Models\ChatRoom;
 use App\Repositories\ChatRoomRepository;
 
 class ChatRoomService
@@ -13,12 +14,12 @@ class ChatRoomService
         $this->chatRoomRepository = $chatRoomRepository;
     }
 
-    public function findChatRoom($sendUserId, $receivedUserId)
+    public function findChatRoom(int $sendUserId, int $receivedUserId): ?ChatRoom
     {
         return $this->chatRoomRepository->findChatRoom($sendUserId, $receivedUserId);
     }
 
-    public function save($adminUserId, $memberUserId)
+    public function save(int $adminUserId, int $memberUserId): ChatRoom
     {
         return $this->chatRoomRepository->save($adminUserId, $memberUserId);
     }

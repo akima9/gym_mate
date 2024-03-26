@@ -3,6 +3,7 @@
 namespace App\Repositories;
 
 use App\Models\Chat;
+use App\Models\ChatRoom;
 use Illuminate\Database\Eloquent\Collection;
 
 class ChatRepository
@@ -16,7 +17,7 @@ class ChatRepository
                     ->get();
     }
 
-    public function save($chatRoom, $request)
+    public function save(ChatRoom $chatRoom, $request): Chat
     {
         return Chat::create([
             'chat_room_id' => $chatRoom->id,
@@ -26,7 +27,7 @@ class ChatRepository
         ]);
     }
 
-    public function findByChatRoomId($chatRoomId)
+    public function findByChatRoomId(int $chatRoomId): Collection
     {
         $totalCount = Chat::where('chat_room_id', $chatRoomId)
             ->with('sendUser', 'receiveUser')
@@ -44,7 +45,7 @@ class ChatRepository
         //             ->get();
     }
 
-    public function findByChatRoomIdAndPage($chatRoomId, $page)
+    public function findByChatRoomIdAndPage(int $chatRoomId, int $page): Collection
     {
         $countPerPage = 10;
 
