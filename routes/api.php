@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\ChatController;
+use App\Http\Controllers\RestBoardController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -20,3 +21,6 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 });
 
 // Route::post('/chat/send', [ChatController::class, 'send'])->name('chats.send');
+
+// Route::resource('boards', BoardController::class);
+Route::resource('boards', RestBoardController::class);
