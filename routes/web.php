@@ -35,6 +35,7 @@ Route::middleware('auth')->group(function () {
     Route::post('/gyms/find', [GymController::class, 'find'])->name('gyms.find');
 });
 
+Route::get('/boards/search', [BoardController::class, 'search'])->name('boards.search');
 Route::resource('boards', BoardController::class);
 Route::get('/chats/load', [ChatController::class, 'load'])->name('chats.load');
 Route::post('/chats/send', [ChatController::class, 'send'])->name('chats.send');

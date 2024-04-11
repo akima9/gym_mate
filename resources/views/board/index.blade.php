@@ -1,15 +1,18 @@
 <x-app-layout>
     <x-slot name="header">
-        <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-            게시판
-        </h2>
+        <div class="flex justify-between">
+            <h2 class="font-semibold text-xl text-gray-800 leading-tight">
+                게시판
+            </h2>
+            <x-secondary-button onclick="mateBoard.search()">검색</x-secondary-button>
+        </div>
     </x-slot>
 
     <div class="py-12">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                 <div class="p-6 text-gray-900">
-                    <div class="flex justify-center my-5 rounded">
+                    {{-- <div class="flex justify-center my-5 rounded">
                         <form action="{{route('boards.index')}}" method="get">
                             <select name="status" id="status" value="{{request('status')}}" class="border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm">
                                 <option value="running" @if (request('status') === 'running') selected @endif>모집중</option>
@@ -19,7 +22,7 @@
                             <input type="text" name="keyword" id="keyword" value="{{request('keyword')}}" class="border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm">
                             <x-primary-button>{{ __('검색') }}</x-primary-button>
                         </form>
-                    </div>
+                    </div> --}}
                     <div class="flex justify-end">
                         <x-secondary-button onclick="mateBoard.checkGym()">글쓰기</x-secondary-button>
                     </div>
@@ -79,6 +82,9 @@
             const mateBoard = {
                 checkGym: () => {
                     self.location = "{{route('boards.create')}}";
+                },
+                search: () => {
+                    self.location = "{{route('boards.search')}}?status={{request('status')}}&trainingDate={{request('trainingDate')}}&keyword={{request('keyword')}}";
                 }
             }
         </script>

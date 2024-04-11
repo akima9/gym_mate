@@ -18,7 +18,7 @@ class BoardController extends Controller
     public function __construct(BoardService $boardService)
     {
         $this->boardService = $boardService;
-        $this->middleware(['auth', 'verified'])->except(['index', 'show']);
+        $this->middleware(['auth', 'verified'])->except(['index', 'show', 'search']);
     }
     /**
      * Display a listing of the resource.
@@ -27,6 +27,11 @@ class BoardController extends Controller
     {
         $boards = $this->boardService->getBoardsPerPage($request);
         return view('board.index', compact('boards'));
+    }
+
+    public function search(Request $request)
+    {
+        return view('board.search');
     }
 
     /**
