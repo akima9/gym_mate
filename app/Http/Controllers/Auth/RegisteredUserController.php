@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreUserRequest;
 use App\Models\User;
 use App\Providers\RouteServiceProvider;
+use App\Services\UserService;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -16,6 +17,12 @@ use Illuminate\View\View;
 
 class RegisteredUserController extends Controller
 {
+    private $userService;
+
+    public function __construct(UserService $userService)
+    {
+        $this->userService = $userService;
+    }
     /**
      * Display the registration view.
      */
@@ -50,6 +57,9 @@ class RegisteredUserController extends Controller
         event(new Registered($user));
 
         Auth::login($user);
+        
+        //update last login
+        $this->userService->updateLastLogin($user);
 
         return redirect(RouteServiceProvider::HOME)->with('status', 'user-registered');
     }

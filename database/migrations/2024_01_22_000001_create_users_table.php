@@ -15,7 +15,7 @@ return new class extends Migration
          * TO-DO
          * 1. 마지막 로그인 일자 추가
          * 2. 친절도 추가(같이 운동하는게 확정되고 운동 종료 시간 이후에 친절도 평가가 있어야함)
-         * 2-1. 친절도는 2.5kg씩 증가 또는 감소 되도록 하자.
+         * 2-1. 친절도는 5kg씩 증가 또는 감소 되도록 하자.(친절근)
          */
         Schema::create('users', function (Blueprint $table) {
             $table->id();
@@ -25,8 +25,10 @@ return new class extends Migration
             $table->string('password');
             $table->enum('gender', ['man', 'woman']);
             $table->integer('age');
+            $table->integer('kindness')->default(100);
             $table->foreignId('gym_id')->nullable()->constrained('gyms')->nullOnDelete();
             $table->rememberToken();
+            $table->timestamp('last_login')->nullable();
             $table->timestamps();
         });
     }
