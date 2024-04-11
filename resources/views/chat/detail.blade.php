@@ -66,7 +66,6 @@
                 handleKeyPress: (event) => {
                     if (event.keyCode === 13) {
                         chat.send();
-                        document.querySelector('#message').value = "";
                     }
                 },
                 scrollToBottom: () => {
@@ -117,7 +116,8 @@
                         'message': message,
                         'receive_user_id': '{{ $chatPartnerId }}',
                     };
-
+                    document.querySelector('#message').value = "";
+                    document.querySelector('#message').focus();
                     chat.postData(url, data);
                 },
                 postData: (url, data) => {
