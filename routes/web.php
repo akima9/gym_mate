@@ -43,3 +43,8 @@ Route::post('/chats/detail', [ChatController::class, 'detail'])->name('chats.det
 Route::resource('chats', ChatController::class);
 
 require __DIR__.'/auth.php';
+
+/**
+ * TO-DO
+ * 게시글 쓰기 페이지 내 운동일자, 운동시간 모바일에서 이상하게 나옴 기본값 설정 해주자!
+ */
