@@ -1,5 +1,5 @@
 <x-app-layout>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.30.1/moment.min.js"></script>
 
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 leading-tight">
@@ -7,12 +7,12 @@
         </h2>
     </x-slot>
 
-    <div class="py-12">
+    <div>
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
-                <div id="messages" class="p-6 text-gray-900 h-96 overflow-y-auto">
+                <div id="messages" class="p-6 text-gray-900 overflow-y-auto max-h-screen -mt-[138px] pt-[138px] pb-[90px]">
                 </div>
-                <div class="p-6 text-gray-900 flex">
+                <div class="p-6 text-gray-900 flex bg-white -mt-[90px] relative z-10">
                     <div class="flex-1">
                         <x-text-input onkeydown="chat.handleKeyPress(event)" id="message" name="message" type="text" class="block w-full" required autofocus autocomplete="message" />
                         <x-input-error class="mt-2" :messages="$errors->get('message')" />
@@ -26,7 +26,7 @@
     @push('pusher-cdn')
         <script src="https://js.pusher.com/8.2.0/pusher.min.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/laravel-echo@1.11.2/dist/echo.iife.js"></script>
-        <script src="https://cdn.jsdelivr.net/momentjs/2.29.1/moment.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.30.1/moment.min.js"></script>
     @endpush
     
     @push('scripts')

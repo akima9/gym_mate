@@ -85,7 +85,6 @@
                     .then(data => {
                         document.querySelector("#gym_id").innerHTML = '';
                         data.forEach(element => {
-                            console.log(element);
                             let optionBox = document.createElement('option');
                             optionBox.value = element.id;
                             optionBox.textContent = element.title + ' (' + element.address + ')';

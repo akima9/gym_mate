@@ -59,10 +59,9 @@ class ChatRepository
                 ->take(1)
                 ->value('id');
 
-        // dd($currentFirstChatId);
         $firstChatId = session()->get('first_chat_id');
 
-        if ($currentFirstChatId === $firstChatId) return [];
+        if ($currentFirstChatId === $firstChatId) return new Collection();
 
         session(['first_chat_id' => $currentFirstChatId]);
 
@@ -80,12 +79,6 @@ class ChatRepository
                         ->take($countPerPage)
                         ->get();
         }
-
-        // $chats = Chat::where('chat_room_id', $chatRoomId)
-        //             ->with('sendUser', 'receiveUser')
-        //             ->skip(($totalCount - $page * $countPerPage) >= 0 ? $totalCount - $page * $countPerPage : 0)
-        //             ->take($countPerPage)
-        //             ->get();
 
         return $chats;
     }
