@@ -59,13 +59,30 @@
         <script>
             const createBoard = {
                 init: () => {
-                    searchBoard.setDefaultTrainingDate();
+                    createBoard.setDefaultTrainingDate();
+                    createBoard.setDefaultTrainingStartTime();
+                    createBoard.setDefaultTrainingEndTime();
                 },
                 setDefaultTrainingDate: () => {
                     let trainingDate = document.querySelector('#trainingDate');
                     if (trainingDate.value.length == 0) {
                         let today = new Date();
                         trainingDate.value = today.toISOString().substring(0,10);
+                    }
+                },
+                setDefaultTrainingStartTime: () => {
+                    let trainingStartTime = document.querySelector('#trainingStartTime');
+                    if (trainingStartTime.value.length == 0) {
+                        let today = new Date();
+                        trainingStartTime.value = today.toISOString().substring(11,16);
+                    }
+                },
+                setDefaultTrainingEndTime: () => {
+                    let trainingEndTime = document.querySelector('#trainingEndTime');
+                    if (trainingEndTime.value.length == 0) {
+                        let today = new Date();
+                        today.setHours(today.getHours() + 1);
+                        trainingEndTime.value = today.toISOString().substring(11,16);
                     }
                 },
                 handleChange: () => {
