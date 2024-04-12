@@ -4,7 +4,7 @@
 
         <!-- Ninkname -->
         <div>
-            <x-input-label for="nickname" :value="__('Nickname')" />
+            <x-input-label for="nickname" :value="__('닉네임')" />
             <x-text-input id="nickname" class="block mt-1 w-full" type="text" name="nickname" :value="old('nickname')" required autofocus autocomplete="nickname" />
             <x-input-error :messages="$errors->get('nickname')" class="mt-2" />
         </div>
@@ -41,15 +41,15 @@
 
         <!-- Gender -->
         <div class="mt-4">
-            <label class="block font-medium text-sm text-gray-700">{{__('Gender')}}</label>
+            <label class="block font-medium text-sm text-gray-700">{{__('성별')}}</label>
             <div class="flex justify-around bg-gray-50 rounded-md shadow-sm mt-1 py-2">
                 <div>
                     <input type="radio" name="gender" id="man" value="man">
-                    <label for="man">Man</label>
+                    <label for="man">남자</label>
                 </div>
                 <div>
                     <input type="radio" name="gender" id="woman" value="woman">
-                    <label for="woman">Woman</label>
+                    <label for="woman">여자</label>
                 </div>
             </div>
             <x-input-error :messages="$errors->get('gender')" class="mt-2" />
@@ -57,17 +57,17 @@
 
         <!-- Age group -->
         <div class="mt-4">
-            <label class="block font-medium text-sm text-gray-700">{{__('Age group')}}</label>
+            <label class="block font-medium text-sm text-gray-700">{{__('연령대')}}</label>
             <select name="age" id="age" class="border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm w-full mt-1">
-                <option value="10">Teenagers</option>
-                <option value="20">Twenties</option>
-                <option value="30">Thirties</option>
-                <option value="40">Forties</option>
-                <option value="50">Fifties</option>
-                <option value="60">Sixties</option>
-                <option value="70">Seventies</option>
-                <option value="80">Eighties</option>
-                <option value="90">Nineties</option>
+                <option value="10">10대</option>
+                <option value="20">20대</option>
+                <option value="30">30대</option>
+                <option value="40">40대</option>
+                <option value="50">50대</option>
+                <option value="60">60대</option>
+                <option value="70">70대</option>
+                <option value="80">80대</option>
+                <option value="90">90대</option>
             </select>
             <x-input-error :messages="$errors->get('age')" class="mt-2" />
         </div>

@@ -58,6 +58,16 @@
     @push('scripts')
         <script>
             const createBoard = {
+                init: () => {
+                    searchBoard.setDefaultTrainingDate();
+                },
+                setDefaultTrainingDate: () => {
+                    let trainingDate = document.querySelector('#trainingDate');
+                    if (trainingDate.value.length == 0) {
+                        let today = new Date();
+                        trainingDate.value = today.toISOString().substring(0,10);
+                    }
+                },
                 handleChange: () => {
                     let selectedOption = document.querySelector('#trainingPart').selectedOptions[0];
                     let selectedValue = selectedOption.value;
@@ -97,6 +107,8 @@
                     trainingPartsDiv.appendChild(badge);
                 }
             }
+
+            createBoard.init();
         </script>
     @endpush
 </x-app-layout>
