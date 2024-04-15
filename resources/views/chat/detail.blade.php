@@ -2,15 +2,25 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.30.1/moment.min.js"></script>
 
     <x-slot name="header">
-        <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-            채팅
-        </h2>
+        <div class="flex justify-between">
+            <h2 class="font-semibold text-xl text-gray-800 leading-tight">
+                채팅
+            </h2>
+            <div>
+                {{-- 게시물 작성자에게만 노출: 채팅방은 게시글 주인이 아닌 사람이 만들기 때문에 member_user_id가 게시글 주인임. --}}
+                @if (empty($board->mate_id) && $chatRoom->member_user_id === Auth()->user()->id)
+                    <x-small-button onclick="chat.confirmMate()" id="confirmMate">운동확정</x-small-button>
+                @endif
+                {{-- 모든 사용자에게 노출 --}}
+                <x-small-button>나가기</x-small-button>
+            </div>
+        </div>
     </x-slot>
 
     <div>
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
-                <div id="messages" class="p-6 text-gray-900 overflow-y-auto max-h-screen -mt-[138px] pt-[138px] pb-[90px]">
+                <div id="messages" class="p-6 text-gray-900 overflow-y-auto min-h-screen max-h-screen -mt-[138px] pt-[138px] pb-[90px]">
                 </div>
                 <div class="p-6 text-gray-900 flex bg-white -mt-[90px] relative z-10">
                     <div class="flex-1">
@@ -204,6 +214,48 @@
                         messagesDiv.scrollTo(0, currentHeight - prevHeight);
                     })
                     .catch(error => console.error('Error:', error));
+                },
+                confirmMate: async () => {
+                    //1. boards 테이블에 guest_id 컬럼 추가 (V)
+                    //2. chat_rooms 테이블에 board_id 컬럼 추가 (V)
+                    //3. guest_id 컬럼에 채팅 상대 user_id 값 Insert (V)
+                    let url = "{{ route('boards.confirmMate') }}";
+                    let data = {
+                        'boardId': "{{ $chatRoom->board_id }}",
+                        'mateId': "{{ $chatPartnerId }}",
+                    };
+
+                    let response = await fetch(url, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                        },
+                        body: JSON.stringify(data)
+                    });
+                    let isSuccess = await response.json();
+
+                    if (isSuccess == true) {
+                        //4. 확정 버튼 변경(취소 버튼) (V)
+                        let confirmMateButton = document.querySelector("#confirmMate");
+                        confirmMateButton.className += ' hidden';
+                        //5. 게시물 마감 변경
+                        let url = "{{ route('boards.off') }}";
+                        let data = {
+                            'boardId': "{{ $chatRoom->board_id }}",
+                        };
+
+                        let response = await fetch(url, {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                                'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                            },
+                            body: JSON.stringify(data)
+                        });
+                        let res = await response.json();
+                        console.log(res);
+                    }
                 }
             };
 

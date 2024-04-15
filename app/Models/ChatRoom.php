@@ -9,7 +9,7 @@ class ChatRoom extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['admin_user_id', 'member_user_id'];
+    protected $fillable = ['admin_user_id', 'member_user_id', 'board_id'];
 
     public function chatAdminUser()
     {

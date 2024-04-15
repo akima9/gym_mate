@@ -21,6 +21,7 @@ return new class extends Migration
             $table->string('content')->nullable();
             $table->enum('status', ['running', 'done'])->default('running');
             $table->foreignId('user_id')->constrained('users')->cascadeOnDelete();
+            $table->foreignId('mate_id')->nullable()->constrained('users')->default(NULL);
             $table->foreignId('gym_id')->constrained('gyms')->cascadeOnDelete();
             $table->timestamps();
         });

@@ -29,6 +29,7 @@
                                 <form action="{{route('chats.detail')}}" method="POST">
                                     @csrf
                                     <input type="hidden" name="chatPartner" value="{{ $board->user_id }}">
+                                    <input type="hidden" name="boardId" value="{{ $board->id }}">
                                     <x-primary-button>{{ __('채팅') }}</x-primary-button>
                                 </form>
                             @endif

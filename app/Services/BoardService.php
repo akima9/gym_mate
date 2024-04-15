@@ -63,4 +63,14 @@ class BoardService
     {
         $this->boardRepository->delete($id);
     }
+
+    public function addMateId($board, $mateId)
+    {
+        return $this->boardRepository->addMateId($board, $mateId);
+    }
+
+    public function off($board)
+    {
+        return $this->boardRepository->off($board);
+    }
 }

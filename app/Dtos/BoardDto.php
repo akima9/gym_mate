@@ -15,6 +15,7 @@ class BoardDto extends BaseDto
     protected $content;
     protected $status;
     protected $user_id;
+    protected $mate_id;
     protected $gym_id;
     protected $created_at;
     protected $updated_at;
@@ -100,7 +101,7 @@ class BoardDto extends BaseDto
 
     public function setUserId($request)
     {
-        $this->user_id = $request->user()->id;
+        $this->user_id = ($request->user()->id) ? $request->user()->id : NULL;
     }
 
     /**
@@ -113,7 +114,7 @@ class BoardDto extends BaseDto
 
     public function setGymId($request)
     {
-        $this->gym_id = $request->user()->gym_id;
+        $this->gym_id = ($request->user()->gym_id) ? $request->user()->gym_id : NULL;
     }
 
     /**

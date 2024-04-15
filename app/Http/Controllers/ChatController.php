@@ -9,6 +9,7 @@ use App\Models\Board;
 use App\Models\Chat;
 use App\Models\ChatRoom;
 use App\Models\User;
+use App\Services\BoardService;
 use App\Services\ChatRoomService;
 use App\Services\ChatService;
 use Illuminate\Http\Request;
@@ -19,11 +20,13 @@ class ChatController extends Controller
 {
     private $chatService;
     private $chatRoomService;
+    private $boardService;
 
-    public function __construct(ChatService $chatService, ChatRoomService $chatRoomService)
+    public function __construct(ChatService $chatService, ChatRoomService $chatRoomService, BoardService $boardService)
     {
         $this->chatService = $chatService;
         $this->chatRoomService = $chatRoomService;
+        $this->boardService = $boardService;
         $this->middleware(['auth', 'verified']);
     }
     /**
@@ -50,14 +53,16 @@ class ChatController extends Controller
     public function detail(Request $request)
     {
         $user = auth()->user();
+        $boardId = $request->boardId;
         $chatPartnerId = $request->chatPartner;
         $chatRoom = $this->chatRoomService->findChatRoom($user->id, $chatPartnerId);
         if (empty($chatRoom)) {
-            $chatRoom = $this->chatRoomService->save($user->id, $chatPartnerId);
+            $chatRoom = $this->chatRoomService->save($user->id, $chatPartnerId, $boardId);
         }
         $chats = $this->chatService->findByChatRoomId($chatRoom->id);
+        $board = $this->boardService->findById($chatRoom->board_id);
         session()->forget('first_chat_id');
-        return view('chat.detail', compact('chats', 'chatPartnerId', 'chatRoom'));
+        return view('chat.detail', compact('chats', 'chatPartnerId', 'chatRoom', 'board'));
     }
 
     public function load(Request $request)

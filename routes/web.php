@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\BoardController;
 use App\Http\Controllers\ChatController;
+use App\Http\Controllers\ChatRoomController;
 use App\Http\Controllers\GymController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
@@ -35,12 +36,16 @@ Route::middleware('auth')->group(function () {
     Route::post('/gyms/find', [GymController::class, 'find'])->name('gyms.find');
 });
 
+Route::post('/boards/confirmMate', [BoardController::class, 'confirmMate'])->name('boards.confirmMate');
+Route::post('/boards/off', [BoardController::class, 'off'])->name('boards.off');
 Route::get('/boards/search', [BoardController::class, 'search'])->name('boards.search');
 Route::resource('boards', BoardController::class);
 Route::get('/chats/load', [ChatController::class, 'load'])->name('chats.load');
 Route::post('/chats/send', [ChatController::class, 'send'])->name('chats.send');
 Route::post('/chats/detail', [ChatController::class, 'detail'])->name('chats.detail');
 Route::resource('chats', ChatController::class);
+
+Route::resource('chatRooms', ChatRoomController::class);
 
 require __DIR__.'/auth.php';
 

@@ -94,6 +94,22 @@ class BoardRepository
                     ]);
     }
 
+    public function addMateId($board, $mateId)
+    {
+        return Board::where('id', $board->id)
+                    ->update([
+                        'mate_id' => $mateId,
+                    ]);
+    }
+
+    public function off($board)
+    {
+        return Board::where('id', $board->id)
+                    ->update([
+                        'status' => 'done',
+                    ]);
+    }
+
     public function delete(int $id): void
     {
         Board::destroy($id);

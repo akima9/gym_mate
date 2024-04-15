@@ -13,11 +13,12 @@ class ChatRoomRepository
                         ->first();
     }
 
-    public function save(int $adminUserId, int $memberUserId): ChatRoom
+    public function save(int $adminUserId, int $memberUserId, int $boardId): ChatRoom
     {
         return ChatRoom::create([
             'admin_user_id' => $adminUserId,
             'member_user_id' => $memberUserId,
+            'board_id' => $boardId,
         ]);
     }
 }

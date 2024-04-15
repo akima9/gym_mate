@@ -19,8 +19,8 @@ class ChatRoomService
         return $this->chatRoomRepository->findChatRoom($sendUserId, $receivedUserId);
     }
 
-    public function save(int $adminUserId, int $memberUserId): ChatRoom
+    public function save(int $adminUserId, int $memberUserId, int $boardId): ChatRoom
     {
-        return $this->chatRoomRepository->save($adminUserId, $memberUserId);
+        return $this->chatRoomRepository->save($adminUserId, $memberUserId, $boardId);
     }
 }

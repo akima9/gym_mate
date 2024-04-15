@@ -97,6 +97,25 @@ class BoardController extends Controller
         return redirect()->route('boards.show', ['board' => $updatedBoard]);
     }
 
+    public function confirmMate(Request $request)
+    {
+        $boardId = $request->boardId;
+        $mateId = $request->mateId;
+
+        $board = $this->boardService->findById($boardId);
+        $updatedCount = $this->boardService->addMateId($board, $mateId);
+        
+        return response()->json($updatedCount);
+    }
+
+    public function off(Request $request)
+    {
+        $boardId = $request->boardId;
+        $board = $this->boardService->findById($boardId);
+        $updateCount = $this->boardService->off($board);
+        return response()->json($updateCount);
+    }
+
     /**
      * Remove the specified resource from storage.
      */
