@@ -11,8 +11,13 @@
                 @if (empty($board->mate_id) && $chatRoom->member_user_id === Auth()->user()->id)
                     <x-small-button onclick="chat.confirmMate()" id="confirmMate">운동확정</x-small-button>
                 @endif
-                {{-- 모든 사용자에게 노출 --}}
-                <x-small-button>나가기</x-small-button>
+                @can('delete', $chatRoom)
+                    <form action="{{route('chatRooms.destroy', ['chatRoom' => $chatRoom])}}" method="POST" onsubmit="return chat.validate()">
+                        @csrf
+                        @method('DELETE')
+                        <x-small-submit-button>나가기</x-small-submit-button>
+                    </form>
+                @endcan
             </div>
         </div>
     </x-slot>
@@ -216,9 +221,6 @@
                     .catch(error => console.error('Error:', error));
                 },
                 confirmMate: async () => {
-                    //1. boards 테이블에 guest_id 컬럼 추가 (V)
-                    //2. chat_rooms 테이블에 board_id 컬럼 추가 (V)
-                    //3. guest_id 컬럼에 채팅 상대 user_id 값 Insert (V)
                     let url = "{{ route('boards.confirmMate') }}";
                     let data = {
                         'boardId': "{{ $chatRoom->board_id }}",
@@ -236,10 +238,9 @@
                     let isSuccess = await response.json();
 
                     if (isSuccess == true) {
-                        //4. 확정 버튼 변경(취소 버튼) (V)
                         let confirmMateButton = document.querySelector("#confirmMate");
                         confirmMateButton.className += ' hidden';
-                        //5. 게시물 마감 변경
+
                         let url = "{{ route('boards.off') }}";
                         let data = {
                             'boardId': "{{ $chatRoom->board_id }}",
@@ -255,7 +256,16 @@
                         });
                         let res = await response.json();
                         console.log(res);
+                        if (res > 0) {
+                            alert("확정되었습니다.");
+                        }
                     }
+                },
+                validate: () => {
+                    if (confirm('채팅을 나가시겠습니까?')) {
+                        return true;
+                    }
+                    return false;
                 }
             };
 

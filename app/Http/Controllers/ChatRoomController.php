@@ -5,9 +5,18 @@ namespace App\Http\Controllers;
 use App\Http\Requests\StoreChatRoomRequest;
 use App\Http\Requests\UpdateChatRoomRequest;
 use App\Models\ChatRoom;
+use App\Services\ChatRoomService;
 
 class ChatRoomController extends Controller
 {
+    private $chatRoomService;
+
+    public function __construct(ChatRoomService $chatRoomService)
+    {
+        $this->chatRoomService = $chatRoomService;
+        $this->middleware(['auth', 'verified']);
+    }
+
     /**
      * Display a listing of the resource.
      */
@@ -61,6 +70,8 @@ class ChatRoomController extends Controller
      */
     public function destroy(ChatRoom $chatRoom)
     {
-        //
+        $this->authorize('delete', $chatRoom);
+        $this->chatRoomService->delete($chatRoom);
+        return redirect()->route('chats.index');
     }
 }

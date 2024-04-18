@@ -45,7 +45,7 @@ class ChatRoomPolicy
      */
     public function delete(User $user, ChatRoom $chatRoom): bool
     {
-        //
+        return ($user->id === $chatRoom->admin_user_id || $user->id === $chatRoom->member_user_id);
     }
 
     /**

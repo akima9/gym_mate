@@ -21,4 +21,9 @@ class ChatRoomRepository
             'board_id' => $boardId,
         ]);
     }
+
+    public function delete(ChatRoom $chatRoom)
+    {
+        ChatRoom::destroy($chatRoom->id);
+    }
 }

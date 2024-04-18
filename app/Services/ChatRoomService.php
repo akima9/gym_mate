@@ -23,4 +23,9 @@ class ChatRoomService
     {
         return $this->chatRoomRepository->save($adminUserId, $memberUserId, $boardId);
     }
+
+    public function delete(ChatRoom $chatRoom)
+    {
+        $this->chatRoomRepository->delete($chatRoom);
+    }
 }
